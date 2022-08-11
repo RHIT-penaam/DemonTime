@@ -10,6 +10,7 @@ class MikeDemonSlayer:
         self.y = y
         self.bullets = []
         self.image = pygame.image.load('Nipple_Boy.jpg')
+        self.image.set_colorkey((255, 255, 255))
 
     def draw(self):
         self.screen.blit(self.image, (0, 0))
@@ -57,8 +58,6 @@ def main():
 
     while True:
         clock.tick(60)
-
-
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT:
@@ -66,12 +65,15 @@ def main():
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
         pressed_keys = pygame.key.get_pressed()
+        hero.draw()
         if pressed_keys[pygame.K_UP]:
             hero.y -= 5
         if pressed_keys[pygame.K_DOWN]:
             hero.y += 5
-        hero.draw()
+        # hero.draw()
+
         pygame.display.update()
+
 
 
 
