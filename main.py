@@ -17,6 +17,12 @@ class MikeDemonSlayer:
         new_bullet = bullet_neutral(self.screen,self.image.get_width + 1, self.y)
         self.bullets.append(new_bullet)
         # add sound?
+class Demon:
+    def __init__(self, screen, x, y):
+        self.x = x
+        self.y = y
+
+
 
 class bullet_neutral:
     def __init__(self, screen, x, y, speed, size, length):
