@@ -25,7 +25,8 @@ class bullet_neutral:
         self.has_boomed = False
 
     def move(self):
-        self.x += speed
+        self.x += self.speed
+
 
     def draw(self):
         pygame.draw.line(self.screen, (255, 100, 70), (self.x, self.y), (self.x, self.y), self.size)
