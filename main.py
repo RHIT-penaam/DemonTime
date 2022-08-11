@@ -70,6 +70,7 @@ def main():
             hero.y -= 5
         if pressed_keys[pygame.K_DOWN]:
             hero.y += 5
+        hero.draw()
         pygame.display.update()
 
 
