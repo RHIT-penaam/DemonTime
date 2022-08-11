@@ -15,14 +15,13 @@ class MikeDemonSlayer:
         new_bullet =
 
 class bullet_neutral:
-    def __init__(self, screen, x, y, speed, size, len):
+    def __init__(self, screen, x, y, speed, size, length):
         self.screen = screen
         self.x = x
         self.y = y
         self.speed = speed
         self.size = int(size)
-        self.len = int(len)
-        self.useless = "Useless"
+        self.len = int(length)
         self.has_boomed = False
 
     def move(self):
