@@ -12,7 +12,7 @@ class MikeDemonSlayer:
     def draw(self):
 
     def primary_fire(self):
-        new_bullet = "PLACEHOLDER FOR PUSH"
+        new_bullet =
 
 class bullet_neutral:
     def __init__(self, screen, x, y, speed, size, length):
