@@ -28,7 +28,7 @@ class bullet_neutral:
         self.x += speed
 
     def draw(self):
-        pygame.draw.line(self.screen, (255, 100, 70), (self.x, self.y), (self.x, self.y), (self.x, self.y + self.len), self.size)
+        pygame.draw.line(self.screen, (255, 100, 70), (self.x, self.y), (self.x, self.y), self.size)
 
 def main():
     pygame.init()
