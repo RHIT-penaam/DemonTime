@@ -22,6 +22,7 @@ class bullet_neutral:
         self.speed = speed
         self.size = int(size)
         self.len = int(len)
+        self.useless = "Useless"
         self.has_boomed = False
 
     def move(self):
