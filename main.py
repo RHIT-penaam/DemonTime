@@ -68,7 +68,10 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_UP]:
             hero.y -= 5
+        if pressed_keys[pygame.K_DOWN]:
+            hero.y += 5
         pygame.display.update()
+
 
 
 main()
