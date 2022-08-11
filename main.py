@@ -8,10 +8,10 @@ class MikeDemonSlayer:
         self.x = x
         self.y = y
         self.bullets = []
-        self.image = None
+        self.image = pygame.image.load('Nipple_Boy.jpg')
 
     def draw(self):
-        pygame.draw
+        self.screen.blit(self.image, (0, 0))
 
     def primary_fire(self):
         new_bullet = bullet_neutral(self.screen,self.image.get_width + 1, self.y)
@@ -45,7 +45,7 @@ class bullet_neutral:
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    pygame.display.set_caption("Mike's Rainy Day goes to Hell")
+    pygame.display.set_caption("Mike's Rainy Day in Hell")
     screen = pygame.display.set_mode((640, 650))
     hero = MikeDemonSlayer(screen, 320, 590)
 
@@ -56,11 +56,12 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
-                MikeDemonSlayer.primary_fire()
+                hero.primary_fire()
 
 
 
         screen.fill((0, 0, 0))
+        hero.draw()
 
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_UP]:
