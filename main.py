@@ -14,7 +14,7 @@ class MikeDemonSlayer:
         self.screen.blit(self.image, (0, 0))
 
     def primary_fire(self):
-        new_bullet = bullet_neutral(self.screen,self.image.get_width + 1, self.y)
+        new_bullet = bullet_neutral(self.screen, 41, self.y)
         self.bullets.append(new_bullet)
         # add sound?
 class Demon:
@@ -45,27 +45,27 @@ class bullet_neutral:
 def main():
     pygame.init()
     clock = pygame.time.Clock()
+    background = pygame.image.load("unknown.png")
     pygame.display.set_caption("Mike's Rainy Day in Hell")
-    screen = pygame.display.set_mode((640, 650))
+    screen = pygame.display.set_mode((1500, 780))
+    # screen.fill((0, 0, 0))
     hero = MikeDemonSlayer(screen, 320, 590)
+    screen.blit(background, (10, 10))
+
 
     while True:
         clock.tick(60)
+
+
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
-
-
-
-        screen.fill((0, 0, 0))
-        hero.draw()
-
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_UP]:
-            MikeDemonSlayer.y -= 5
+            hero.y -= 5
 
 
 
