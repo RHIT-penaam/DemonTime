@@ -1,6 +1,7 @@
-import sys
-
 import pygame
+import sys
+import time
+import random
 
 class MikeDemonSlayer:
     def __init__(self, screen, x, y):
@@ -47,10 +48,11 @@ def main():
     clock = pygame.time.Clock()
     background = pygame.image.load("unknown.png")
     pygame.display.set_caption("Mike's Rainy Day in Hell")
+    is_game_over = False
     screen = pygame.display.set_mode((1500, 780))
-    # screen.fill((0, 0, 0))
+    screen.fill((100, 100, 100))
     hero = MikeDemonSlayer(screen, 320, 590)
-    screen.blit(background, (10, 10))
+    screen.blit(background, (0, 0))
 
 
     while True:
@@ -66,7 +68,7 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_UP]:
             hero.y -= 5
-
+        pygame.display.update()
 
 
 main()
