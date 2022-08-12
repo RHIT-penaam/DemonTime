@@ -56,12 +56,14 @@ def main():
     screen = pygame.display.set_mode((1500, 780))
     screen.fill((100, 100, 100))
     screen.blit(background, (0, 0))
-    hero = MikeDemonSlayer(screen, 320, 590)
+    hero = MikeDemonSlayer(screen, 20, 590)
 
 
 
     while True:
         clock.tick(60)
+        hero.draw()
+        screen.blit(background, (0, 0))
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT:
@@ -73,14 +75,12 @@ def main():
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
-
         if pressed_keys[pygame.K_UP]:
             hero.move(-1)
-            hero.draw()
             print("up")
+
         if pressed_keys[pygame.K_DOWN]:
             hero.move(1)
-            hero.draw()
             print("down")
 
         pygame.display.update()
