@@ -16,7 +16,7 @@ class MikeDemonSlayer:
         self.screen.blit(self.image, (0, 0))
 
     def primary_fire(self):
-        new_bullet = bullet_neutral(self.screen, 41, self.y, 4, 3, 5)
+        new_bullet = bullet_neutral(self, self.screen, 41, self.y, 4, 3, 5)
         self.bullets.append(new_bullet)
         # add sound?
 class Demon:
@@ -27,7 +27,7 @@ class Demon:
 
 
 class bullet_neutral:
-    def __init__(self, screen, x, y, speed, size, leng):
+    def __init__(self, hero, screen, x, y, speed, size, leng):
         self.screen = screen
         self.x = x
         self.y = y
@@ -35,6 +35,7 @@ class bullet_neutral:
         self.size = int(size)
         self.leng = int(leng)
         self.has_boomed = False
+        self.hero = hero
 
 
     def move(self):
@@ -43,7 +44,7 @@ class bullet_neutral:
 
     def draw(self):
         pygame.draw.line(self.screen, (255, 100, 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
-
+        self.hero.bullets += list(self)
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -71,7 +72,6 @@ def main():
         if pressed_keys[pygame.K_DOWN]:
             hero.y += 5
         hero.draw()
-
         pygame.display.update()
 
 
