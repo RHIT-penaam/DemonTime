@@ -9,14 +9,14 @@ class MikeDemonSlayer:
         self.x = x
         self.y = y
         self.bullets = []
-        self.image = pygame.image.load('Nipple_Boy.jpg')
+        self.image = pygame.image.load('nipple_boy_transparent')
         self.image.set_colorkey((255, 255, 255))
 
     def draw(self):
         self.screen.blit(self.image, (self.x, self.y))
 
     def primary_fire(self):
-        new_bullet = bullet_neutral(self, self.screen, 41, self.y, 4, 3, 5)
+        new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 4, 3, 3)
         self.bullets.append(new_bullet)
         # add sound?
 
