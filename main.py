@@ -46,7 +46,7 @@ class bullet_neutral:
 
 
     def draw(self):
-        pygame.draw.line(self.screen, (255, 100, 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
+        pygame.draw.line(self.screen, (255, random.randrange(10, 200, 10), 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
 def main():
     pygame.init()
     clock = pygame.time.Clock()
