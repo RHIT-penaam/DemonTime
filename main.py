@@ -71,10 +71,12 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         hero.draw()
         if pressed_keys[pygame.K_UP]:
-            hero.move(1)
+            screen.blit(background, (0, 0))
+            hero.move(-1)
             print("up")
         if pressed_keys[pygame.K_DOWN]:
-            hero.move(-1)
+            screen.blit(background, (0, 0))
+            hero.move(1)
             print("down")
         pygame.display.update()
 
