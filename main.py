@@ -13,12 +13,15 @@ class MikeDemonSlayer:
         self.image.set_colorkey((255, 255, 255))
 
     def draw(self):
-        self.screen.blit(self.image, (0, 0))
+        self.screen.blit(self.image, (self.x, self.y))
 
     def primary_fire(self):
         new_bullet = bullet_neutral(self, self.screen, 41, self.y, 4, 3, 5)
         self.bullets.append(new_bullet)
         # add sound?
+
+    def move(self, disp):
+        self.y += int(disp)
 class Demon:
     def __init__(self, screen, x, y):
         self.x = x
@@ -44,7 +47,6 @@ class bullet_neutral:
 
     def draw(self):
         pygame.draw.line(self.screen, (255, 100, 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
-        self.hero.bullets += list(self)
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -53,8 +55,9 @@ def main():
     is_game_over = False
     screen = pygame.display.set_mode((1500, 780))
     screen.fill((100, 100, 100))
-    hero = MikeDemonSlayer(screen, 320, 590)
     screen.blit(background, (0, 0))
+    hero = MikeDemonSlayer(screen, 320, 590)
+
 
 
     while True:
@@ -68,10 +71,11 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         hero.draw()
         if pressed_keys[pygame.K_UP]:
-            hero.y -= 5
+            hero.move(1)
+            print("up")
         if pressed_keys[pygame.K_DOWN]:
-            hero.y += 5
-        hero.draw()
+            hero.move(-1)
+            print("down")
         pygame.display.update()
 
 
