@@ -59,24 +59,25 @@ class Demon:
         return hitbox.collidepoint(bullet.x, bullet.y)
 
 
-# class Horde:
-#     def __init__(self, screen):
-#         self.horde = []
-#         Impliment death wail
-        # for d in range(10):
-        #     self.demons.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth"))
+class Horde:
+    def __init__(self, screen):
+        self.horde = []
 
-    # @property
-    # def is_defeated(self):
-    #     return len(self.horde) == 0
+#         Impliment death wail
+        for d in range(10):
+            self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth"))
     #
-    # def move(self):
-    #     for demon in self.horde:
-    #         demon.move()
-    #
-    # def draw(self):
-    #     for demon in self.horde:
-    #         demon.draw()
+    @property
+    def is_defeated(self):
+        return len(self.horde) == 0
+
+    def move(self):
+        for demon in self.horde:
+            demon.move()
+
+    def draw(self):
+        for demon in self.horde:
+            demon.draw()
 
     # Maybe implement a corpse cleaner upper, or maybe not
 
@@ -120,7 +121,7 @@ def main():
     screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth")
-    # throng = Horde(screen)
+    throng = Horde(screen)
     poop = 'kanye'
 
 
@@ -137,22 +138,31 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
         hero.draw()
-        incanus.move()
-        incanus.draw()
+        # incanus.move()
+        # incanus.draw()
+        throng.move()
+        throng.draw()
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
             hero.remove_dead_bullets()
-        for bullet in hero.bullets:
-            if bullet.x >= screen.get_width():
-                bullet.has_boomed = True
-            if incanus.hit_by(bullet):
+        counter = 0
+        for demon in throng.horde:
+            for bullet in hero.bullets:
+                if bullet.x >= screen.get_width():
+                    bullet.has_boomed = True
+                if demon.hit_by(bullet):
+                    bullet.has_boomed = True
+                    del throng.horde[counter]
+                    scoreboard.score += 100
+                if bullet.has_boomed == True:
+                    del bullet
 
-                bullet.has_boomed = True
-            if bullet.has_boomed == True:
-                del bullet
-                del incanus
-                scoreboard.score += 100
+                # del incanus
+            counter = counter + 1
+
+            #
+
 
 
 
