@@ -16,18 +16,63 @@ class MikeDemonSlayer:
         self.screen.blit(self.image, (self.x, self.y))
 
     def primary_fire(self):
-        new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 4, 3, 3)
+        new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 4, random.randrange(3, 10), random.randrange(3, 10))
         self.bullets.append(new_bullet)
         # add sound?
 
     def move(self, disp):
         self.y += int(disp)
+    def remove_dead_bullets(self):
+        for k in range(len(self.bullets), - 1, - 1, - 1):
+            if self.bullets[k].has_boomed or self.bullets[k].x > 1200:
+                del self.missiles[k]
+
+
 class Demon:
-    def __init__(self, screen, x, y):
+    def __init__(self, screen, x, y, max_health, species):
         self.x = x
         self.y = y
+        self.screen = screen
+        self.image_neut = pygame.image.load('Goofy_Mouth_Boy.png')
+        self.image_bloodied = pygame.image.load('nipple_boy_transparent')
+        self.image_dead = pygame.image.load('nipple_boy_transparent')
+        self.health = max_health
+        self.max = max_health
+        self.species = species
+        self.is_dead = False
 
+    def draw(self):
+        if self.health // self.max > 0.5:
+            self.screen.blit(self.image_neut, (self.x, self.y))
+        elif self.health // self.max < 0:
+            self.screen.blit(self.image_bloodied, (self.x, self.y))
+        else:
+            self.screen.blit(self.image_bloodied, (self.x, self.y))
+            self.is_dead = True
 
+    def move(self):
+        self.x -= 4
+
+# class Horde:
+#     def __init__(self, screen):
+#         self.horde = []
+#         Impliment death wail
+        # for d in range(10):
+        #     self.demons.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth"))
+
+    # @property
+    # def is_defeated(self):
+    #     return len(self.horde) == 0
+    #
+    # def move(self):
+    #     for demon in self.horde:
+    #         demon.move()
+    #
+    # def draw(self):
+    #     for demon in self.horde:
+    #         demon.draw()
+
+    # Maybe implement a corpse cleaner upper, or maybe not
 
 class bullet_neutral:
     def __init__(self, hero, screen, x, y, speed, size, leng):
@@ -57,7 +102,8 @@ def main():
     screen.fill((100, 100, 100))
     screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
-
+    incanus = Demon(screen, 1000, 200, 30, "teeth")
+    # throng = Horde(screen)
 
 
     while True:
@@ -72,6 +118,9 @@ def main():
                 hero.primary_fire()
         pressed_keys = pygame.key.get_pressed()
         hero.draw()
+
+        incanus.move()
+        incanus.draw()
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
