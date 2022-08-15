@@ -10,13 +10,13 @@ class MikeDemonSlayer:
         self.y = y
         self.bullets = []
         self.image = pygame.image.load('nipple_boy_transparent')
-        self.image.set_colorkey((255, 255, 255))
+        # self.image.set_colorkey((255, 255, 255))
 
     def draw(self):
         self.screen.blit(self.image, (self.x, self.y))
 
     def primary_fire(self):
-        new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 4, random.randrange(3, 10), random.randrange(3, 10))
+        new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 5, 4, 4)
         self.bullets.append(new_bullet)
         # add sound?
 
@@ -152,7 +152,7 @@ def main():
             hero.remove_dead_bullets()
         counter = 0
         for demon in throng.horde:
-            if demon.x < hero.x:
+            if demon.x < hero.image.get_width():
                 is_game_over = True
             for bullet in hero.bullets:
                 if bullet.x >= screen.get_width():
