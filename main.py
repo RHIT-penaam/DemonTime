@@ -23,10 +23,10 @@ class MikeDemonSlayer:
     def move(self, disp):
         self.y += int(disp)
 
-    # def remove_dead_bullets(self):
-    #     for k in range(len(self.bullets), - 1, - 1, - 1):
-    #         if self.bullets[k].has_boomed or self.bullets[k].x > 1200:
-    #             del self.missiles[k]
+    def remove_dead_bullets(self):
+        for k in range(len(self.bullets) -1, - 1, - 1):
+            if self.bullets[k].has_boomed or self.bullets[k].x > 1500:
+                del self.bullets[k]
 
 
 class Demon:
@@ -142,14 +142,15 @@ def main():
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
-        for bullet in hero.bullets:
-            if bullet.x >= screen.get_width():
-                bullet.has_boomed = True
-            if incanus.hit_by(bullet):
-                bullet.has_boomed = True
-            if bullet.has_boomed == True:
-                del bullet
-                scoreboard.score += 100
+            hero.remove_dead_bullets()
+        # for bullet in hero.bullets:
+        #     if bullet.x >= screen.get_width():
+        #         bullet.has_boomed = True
+        #     if incanus.hit_by(bullet):
+        #         bullet.has_boomed = True
+        #     if bullet.has_boomed == True:
+        #         del bullet
+        #         scoreboard.score += 100
 
 
 
