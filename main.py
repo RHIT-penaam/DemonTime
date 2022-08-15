@@ -143,14 +143,10 @@ def main():
             bullet.move()
             bullet.draw()
             hero.remove_dead_bullets()
-        # for bullet in hero.bullets:
-        #     if bullet.x >= screen.get_width():
-        #         bullet.has_boomed = True
-        #     if incanus.hit_by(bullet):
-        #         bullet.has_boomed = True
-        #     if bullet.has_boomed == True:
-        #         del bullet
-        #         scoreboard.score += 100
+        for bullet in hero.bullets:
+            if incanus.hit_by(bullet):
+                bullet.has_boomed = True
+                scoreboard.score += 100
 
 
 
