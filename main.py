@@ -53,8 +53,9 @@ class Demon:
 
     def move(self):
         self.x -= 4
+
     def hit_by(self, bullet):
-        hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width())
+        hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width(), self.image_neut.get_height())
         return hitbox.collidepoint(bullet.x, bullet.y)
 
 
