@@ -23,6 +23,10 @@ class MikeDemonSlayer:
     def move(self, disp):
         self.y += int(disp)
 
+    def remove_useless_bullets(self):
+        for j in range(len(self.bullets) - 1, -1, -1):
+            if self.bullets[j].has_boomed or self.bullets[j].x > 1500:
+                del self.bullets[j]
     # def remove_dead_bullets(self):
     #     for k in range(len(self.bullets), - 1, - 1, - 1):
     #         if self.bullets[k].has_boomed or self.bullets[k].x > 1200:
@@ -138,11 +142,7 @@ def main():
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
-        for bullet in hero.bullets:
-            if bullet.x >= screen.get_width():
-                bullet.has_boomed = True
-            if bullet.has_boomed == True:
-                del bullet
+            hero.remove_useless_bullets()
         if pressed_keys[pygame.K_UP]:
             hero.move(-5)
             print("up")
