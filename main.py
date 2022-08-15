@@ -136,21 +136,21 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
         hero.draw()
-
         incanus.move()
         incanus.draw()
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
             hero.remove_dead_bullets()
-        # for bullet in hero.bullets:
-        #     if bullet.x >= screen.get_width():
-        #         bullet.has_boomed = True
-        #     if incanus.hit_by(bullet):
-        #         bullet.has_boomed = True
-        #     if bullet.has_boomed == True:
-        #         del bullet
-        #         scoreboard.score += 100
+        for bullet in hero.bullets:
+            if bullet.x >= screen.get_width():
+                bullet.has_boomed = True
+            if incanus.hit_by(bullet):
+                bullet.has_boomed = True
+            if bullet.has_boomed == True:
+                del bullet
+                del incanus
+                scoreboard.score += 100
 
 
 
