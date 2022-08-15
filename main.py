@@ -22,16 +22,17 @@ class MikeDemonSlayer:
 
     def move(self, disp):
         self.y += int(disp)
-    def remove_dead_bullets(self):
-        for k in range(len(self.bullets), - 1, - 1, - 1):
-            if self.bullets[k].has_boomed or self.bullets[k].x > 1200:
-                del self.missiles[k]
+
+    # def remove_dead_bullets(self):
+    #     for k in range(len(self.bullets), - 1, - 1, - 1):
+    #         if self.bullets[k].has_boomed or self.bullets[k].x > 1200:
+    #             del self.missiles[k]
 
 
 class Demon:
     def __init__(self, screen, x, y, max_health, species):
-        self.x = x
-        self.y = y
+        self.x = random.randint(screen.get_leng(), 0)
+        self.y = random.randint(screen.get_height(), 0)
         self.screen = screen
         self.image_neut = pygame.image.load('Goofy_Mouth_Boy.png')
         self.image_bloodied = pygame.image.load('nipple_boy_transparent')
@@ -52,6 +53,8 @@ class Demon:
 
     def move(self):
         self.x -= 4
+    def hit_by(self):
+        hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width())
 
 # class Horde:
 #     def __init__(self, screen):
@@ -92,6 +95,17 @@ class bullet_neutral:
 
     def draw(self):
         pygame.draw.line(self.screen, (255, random.randrange(10, 200, 10), 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
+
+class Scoreboard(object):
+    def __init__(self, screen):
+        self.screen = screen
+        self.score = 0
+        self.font = pygame.font.Font(None, 30)
+    def draw(self):
+        score_string = "Score: {}".format(self.score)
+        score_image = self.font.render(score_string, True, (255, 255, 255))
+        self.screen.blit(score_image, (5, 5))
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -133,6 +147,8 @@ def main():
             print("down")
 
         pygame.display.update()
+
+
 
 
 
