@@ -139,11 +139,11 @@ def main():
             bullet.move()
             bullet.draw()
         if pressed_keys[pygame.K_UP]:
-            hero.move(-1)
+            hero.move(-5)
             print("up")
 
         if pressed_keys[pygame.K_DOWN]:
-            hero.move(1)
+            hero.move(5)
             print("down")
 
         pygame.display.update()
