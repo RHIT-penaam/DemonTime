@@ -10,7 +10,7 @@ class MikeDemonSlayer:
         self.y = y
         self.bullets = []
         self.image = pygame.image.load('nipple_boy_transparent')
-        # self.image.set_colorkey((255, 255, 255))
+        # self.image.set_colorkey((255, 255, 255)) 'has no effect'
 
     def draw(self):
         self.screen.blit(self.image, (self.x, self.y))
