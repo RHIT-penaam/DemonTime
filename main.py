@@ -122,7 +122,7 @@ def main():
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth")
     throng = Horde(screen)
-    poop = 'kanye'
+    game_over_image = pygame.image.load()
 
 
     while True:
@@ -148,6 +148,8 @@ def main():
             hero.remove_dead_bullets()
         counter = 0
         for demon in throng.horde:
+            if demon.x < hero.x:
+                is_game_over = True
             for bullet in hero.bullets:
                 if bullet.x >= screen.get_width():
                     bullet.has_boomed = True
