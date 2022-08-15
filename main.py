@@ -122,7 +122,7 @@ def main():
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth")
     throng = Horde(screen)
-    game_over_image = pygame.image.load()
+    game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
 
 
     while True:
@@ -142,6 +142,10 @@ def main():
         # incanus.draw()
         throng.move()
         throng.draw()
+        if is_game_over:
+            screen.blit(game_over_image, (500, 226))
+            pygame.display.update()
+            continue
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
