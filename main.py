@@ -53,8 +53,10 @@ class Demon:
 
     def move(self):
         self.x -= 4
-    def hit_by(self):
+    def hit_by(self, bullet):
         hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width())
+        return hitbox.collidepoint(bullet.x, bullet.y)
+
 
 # class Horde:
 #     def __init__(self, screen):
@@ -131,6 +133,7 @@ def main():
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
         pressed_keys = pygame.key.get_pressed()
+        scoreboard = Scoreboard(screen)
         hero.draw()
 
         incanus.move()
@@ -141,8 +144,14 @@ def main():
         for bullet in hero.bullets:
             if bullet.x >= screen.get_width():
                 bullet.has_boomed = True
+            if incanus.hit_by(bullet):
+                bullet.has_boomed = True
             if bullet.has_boomed == True:
                 del bullet
+                scoreboard.score += 100
+
+
+
         if pressed_keys[pygame.K_UP]:
             hero.move(-5)
             print("up")
