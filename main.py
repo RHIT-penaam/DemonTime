@@ -31,9 +31,9 @@ class MikeDemonSlayer:
 
 class Demon:
     def __init__(self, screen, x, y, max_health, species):
-        self.x = screen.get_length()
-        self.y = random.randint(screen.get_height(), 0)
         self.screen = screen
+        self.x = screen.get_width()
+        self.y = random.randint(0, screen.get_height())
         self.image_neut = pygame.image.load('Goofy_Mouth_Boy.png')
         self.image_bloodied = pygame.image.load('nipple_boy_transparent')
         self.image_dead = pygame.image.load('nipple_boy_transparent')
