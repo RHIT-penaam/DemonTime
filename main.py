@@ -121,6 +121,7 @@ def main():
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth")
     # throng = Horde(screen)
+    poop = 'kanye'
 
 
     while True:
@@ -146,6 +147,7 @@ def main():
             if bullet.x >= screen.get_width():
                 bullet.has_boomed = True
             if incanus.hit_by(bullet):
+
                 bullet.has_boomed = True
             if bullet.has_boomed == True:
                 del bullet
