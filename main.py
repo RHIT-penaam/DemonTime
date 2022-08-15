@@ -94,7 +94,7 @@ class bullet_neutral:
 
 
     def draw(self):
-        pygame.draw.line(self.screen, (255, random.randrange(10, 200, 10), 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
+        pygame.draw.line(self.screen, (250, random.randrange(10, 150, 10), 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
 
 class Scoreboard(object):
     def __init__(self, screen):
@@ -138,6 +138,11 @@ def main():
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
+        for bullet in hero.bullets:
+            if bullet.x >= screen.get_width():
+                bullet.has_boomed = True
+            if bullet.has_boomed == True:
+                del bullet
         if pressed_keys[pygame.K_UP]:
             hero.move(-5)
             print("up")
@@ -145,7 +150,8 @@ def main():
         if pressed_keys[pygame.K_DOWN]:
             hero.move(5)
             print("down")
-
+        if pressed_keys[pygame.K_z]:
+            print(hero.bullets)
         pygame.display.update()
 
 
