@@ -34,6 +34,7 @@ class Demon:
         self.screen = screen
         self.x = screen.get_width()
         self.y = random.randint(0, screen.get_height())
+        self.image_current = pygame.image.load('transparent demon')
         self.image_neut = pygame.image.load('transparent demon')
         self.image_bloodied = pygame.image.load('nipple_boy_transparent')
         self.image_dead = pygame.image.load('nipple_boy_transparent')
@@ -42,21 +43,22 @@ class Demon:
         self.species = species
         self.is_dead = False
         self.step = step
-
-    def draw(self):
+    def costume(self):
         if self.health // self.max > 0.5:
-            self.screen.blit(self.image_neut, (self.x, self.y))
+            self.image_current = self.image_neut
         elif self.health // self.max < 0:
-            self.screen.blit(self.image_bloodied, (self.x, self.y))
-        else:
-            self.screen.blit(self.image_bloodied, (self.x, self.y))
-            self.is_dead = True
+            self.image_current = self.image_bloodied
+    def draw(self):
+        self.screen.blit(self.image_current, (self.x, self.y))
+
 
     def move(self):
         self.x -= self.step
 
     def hit_by(self, bullet):
         hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width(), self.image_neut.get_height())
+        if hitbox.collidepoint(bullet.x, bullet.y):
+            self.health -= 5
         return hitbox.collidepoint(bullet.x, bullet.y)
 
 class particle:
@@ -70,7 +72,7 @@ class particle:
 
     def draw(self):
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size)
-
+        self.the_end -= 1
     def move(self):
         self.x += random.randrange(-3, 3)
         self.y += random.randrange(-3, 3) + 1
@@ -107,8 +109,8 @@ class gibs:
         for blood in self.bloodlets:
             self.conut += 1
             blood.draw()
-            blood.the_end -= 1
-
+            if blood.the_end <= 0:
+                del self.bloodlets[self.conut - 1]
 
 class splatter:
     def __init__(self, screen, intensity, x, y):
@@ -300,19 +302,19 @@ def main():
                     bullet.has_boomed = True
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
-                    del throng.horde[counter]
                     scoreboard.score += 100
                     for k in range(6):
-                        offal.make_gib(throng.horde[counter].x, throng.horde[counter].y)
-                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
-                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
-                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_gib(demon.x, demon.y)
+                        offal.make_blood(demon.x, demon.y)
+                        offal.make_blood(demon.x, demon.y)
+                        offal.make_blood(demon.x, demon.y)
+                    del throng.horde[counter]
 
                 if bullet.has_boomed == True:
                     del bullet
-
-                # del incanus
             counter = counter + 1
+                # del incanus
+
 
             #
 
