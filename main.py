@@ -3,6 +3,7 @@ import sys
 import time
 import random
 
+
 class MikeDemonSlayer:
     def __init__(self, screen, x, y):
         self.screen = screen
@@ -24,7 +25,7 @@ class MikeDemonSlayer:
         self.y += int(disp)
 
     def remove_dead_bullets(self):
-        for k in range(len(self.bullets) -1, - 1, - 1):
+        for k in range(len(self.bullets) - 1, - 1, - 1):
             if self.bullets[k].has_boomed or self.bullets[k].x > 1500:
                 del self.bullets[k]
 
@@ -43,14 +44,15 @@ class Demon:
         self.species = species
         self.is_dead = False
         self.step = step
+
     def costume(self):
         if self.health // self.max > 0.5:
             self.image_current = self.image_neut
         elif self.health // self.max < 0:
             self.image_current = self.image_bloodied
+
     def draw(self):
         self.screen.blit(self.image_current, (self.x, self.y))
-
 
     def move(self):
         beans = random.randrange(2, 6, 1)
@@ -62,6 +64,7 @@ class Demon:
         if hitbox.collidepoint(bullet.x, bullet.y):
             self.health -= 5
         return hitbox.collidepoint(bullet.x, bullet.y)
+
 
 class particle:
     def __init__(self, screen, x, y, size, color):
@@ -75,9 +78,12 @@ class particle:
     def draw(self):
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size)
         self.the_end -= 1
+
     def move(self):
         self.x += random.randrange(-4, 6)
         self.y += random.randrange(-4, 4) + 1
+
+
 class gibs:
     def __init__(self, screen):
         self.splatters = []
@@ -114,6 +120,7 @@ class gibs:
             if blood.the_end <= 0:
                 del self.bloodlets[self.conut - 1]
 
+
 class splatter:
     def __init__(self, screen, intensity, x, y):
         self.meat_image = pygame.image.load('output-onlinepngtools (1).png')
@@ -130,8 +137,10 @@ class splatter:
             self.current_image = self.meat_image
         else:
             self.current_image = self.bone_image
+
     def draw(self):
         self.screen.blit(self.current_image, (self.x, self.y))
+
     def move(self):
         self.dx = random.randrange(-3, 3)
         self.dy = random.randrange(-3, 3)
@@ -139,23 +148,16 @@ class splatter:
         self.y += self.dy + 1
 
 
-
-
-
-
-
-
-
-
-
 class Horde:
     def __init__(self, screen, num_enemies):
         self.horde = []
 
-#         Impliment death wail
+        #         Implement death wail
         for h in range(num_enemies):
             for d in range(10):
-                self.horde.append(Demon(screen, 1200 * d, random.randrange(200, 300) * h, 30, "mouth", random.randrange(1, 3, 1)))
+                self.horde.append(
+                    Demon(screen, 1200 * d, random.randrange(200, 300) * h, 30, "mouth", random.randrange(1, 3, 1)))
+
     #
     @property
     def is_defeated(self):
@@ -171,6 +173,7 @@ class Horde:
 
     # Maybe implement a corpse cleaner upper, or maybe not
 
+
 class bullet_neutral:
     def __init__(self, hero, screen, x, y, speed, size, leng):
         self.screen = screen
@@ -182,23 +185,26 @@ class bullet_neutral:
         self.has_boomed = False
         self.hero = hero
 
-
     def move(self):
         self.x += self.speed
 
-
     def draw(self):
-        pygame.draw.line(self.screen, (250, random.randrange(10, 150, 10), 70), (self.x, self.y), (self.x + self.leng, self.y), self.size)
+        pygame.draw.line(self.screen, (250, random.randrange(10, 150, 10), 70), (self.x, self.y),
+                         (self.x + self.leng, self.y), self.size)
+
 
 class Scoreboard(object):
+
     def __init__(self, screen):
         self.screen = screen
         self.score = 0
         self.font = pygame.font.Font(None, 30)
+
     def draw(self):
         score_string = "Score: {}".format(self.score)
         score_image = self.font.render(score_string, True, (255, 255, 255))
         self.screen.blit(score_image, (5, 5))
+
 
 class Demonwing:
     def __init__(self, screen, x, y, max_health, species, speed):
@@ -210,6 +216,7 @@ class Demonwing:
         self.y = y
         self.incinerate = []
         self.count = 0
+
     def draw(self):
         pygame.draw.rect(self.screen, pygame.Color('pink'), pygame.Rect(self.x, self.y, 10, 10))
 
@@ -217,28 +224,30 @@ class Demonwing:
         self.x -= self.speed
         self.count += 1
 
-#     def spitfire(self):
-#         flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
-#         self.incinerate.append(flame)
-# #
-# class Hellfire:
-#     def __init__(self, screen, x, y, len, width, spd):
+    def spitfire(self):
+        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
+        self.incinerate.append(flame)
+
+
 #
-#         self.screen = screen
-#         self.x = x
-#         self.y = y
-#         self.len = len
-#         self.width = width
-#         self.spd = spd
-#         print("start")
-#
-#     def move(self):
-#         self.x -= self.spd
-#         print("move")
-#
-#     def draw(self):
-#         print('pew!')
-#         pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
+class Hellfire:
+    def __init__(self, screen, x, y, len, width, spd):
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.len = len
+        self.width = width
+        self.spd = spd
+        print("start")
+
+    def move(self):
+        self.x -= self.spd
+        print("move")
+
+    def draw(self):
+        print('pew!')
+        pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
+
 
 #
 
@@ -284,9 +293,8 @@ def main():
             pygame.display.update()
             continue
 
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
         pressed_keys = pygame.key.get_pressed()
-
 
         hero.draw()
         # incanus.move()
@@ -332,7 +340,7 @@ def main():
                 if bullet.has_boomed == True:
                     del bullet
             counter = counter + 1
-                # del incanus
+            # del incanus
 
         if throng.is_defeated:
             num_enemies += 1
@@ -352,14 +360,4 @@ def main():
         pygame.display.update()
 
 
-
-
-
 main()
-
-
-
-
-
-
-
