@@ -111,6 +111,43 @@ class Scoreboard(object):
         score_image = self.font.render(score_string, True, (255, 255, 255))
         self.screen.blit(score_image, (5, 5))
 
+class Demonwing:
+    def __init__(self, screen, x, y, max_health, species, speed):
+        self.screen = screen
+        self.max_health = max_health
+        self.species = species
+        self.speed = speed
+        self.x = x
+        self.y = y
+        self.incinerate = []
+        self.count = 0
+    def draw(self):
+        pygame.draw.rect(self.screen, pygame.Color('pink'), pygame.Rect(self.x, self.y, 10, 10))
+
+    def move(self):
+        self.x -= self.speed
+        self.count += 1
+
+    # def spitfire(self):
+    #     flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
+    #     self.incinerate.append(flame)
+
+# class Hellfire:
+#     def __init__(self, screen, x, y, len, width, spd):
+#         self.screen = screen
+#         self.x = x
+#         self.y = y
+#         self.len = len
+#         self.width = width
+#         self.spd = spd
+#
+#     def move(self):
+#         self.x -= self.spd
+#
+#     def draw(self):
+#         pygame.draw.line(self.screen, (0, 250, 0), (self.x - self.len, self.y), (self.x, self.y), self.width)
+
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -122,6 +159,7 @@ def main():
     # screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
+    bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
     throng = Horde(screen)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
 
@@ -136,12 +174,20 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
+                # bonnibel.spitfire()
+
         screen.fill((0,0,0))
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
         hero.draw()
         # incanus.move()
         # incanus.draw()
+        bonnibel.move()
+        bonnibel.draw()
+        # if bonnibel.count >= 0:
+        #     bonnibel.spitfire()
+
+
         throng.move()
         throng.draw()
         if is_game_over:
@@ -189,5 +235,4 @@ def main():
 
 
 
-# I hate this
 main()
