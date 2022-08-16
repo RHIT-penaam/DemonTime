@@ -59,6 +59,90 @@ class Demon:
         hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width(), self.image_neut.get_height())
         return hitbox.collidepoint(bullet.x, bullet.y)
 
+class particle:
+    def __init__(self, screen, x, y, size, color):
+        self.x = x
+        self.y = y
+        self.screen = screen
+        self.size = size
+        self.color = color
+        self.the_end = 30
+
+    def draw(self):
+        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size)
+
+    def move(self):
+        self.x += random.randrange(-3, 3)
+        self.y += random.randrange(-3, 3) + 1
+class gibs:
+    def __init__(self, screen):
+        self.splatters = []
+        self.screen = screen
+        self.conut = 0
+        self.bloodlets = []
+
+    def make_gib(self, x, y):
+        tony = splatter(self.screen, 32, x, y)
+        self.splatters += [tony]
+
+    def make_blood(self, x, y):
+        antonio = particle(self.screen, x, y, 1, (255, 30, 40))
+        self.bloodlets += [antonio]
+
+    def move(self):
+        for splat in self.splatters:
+            splat.move()
+        for bleed in self.bloodlets:
+            bleed.move()
+
+    def draw(self):
+        self.conut = 0
+        for splat in self.splatters:
+            self.conut += 1
+            splat.draw()
+            splat.the_end -= 1
+            if splat.the_end <= 0:
+                del self.splatters[self.conut - 1]
+        self.conut = 0
+        for blood in self.bloodlets:
+            self.conut += 1
+            blood.draw()
+            blood.the_end -= 1
+
+
+class splatter:
+    def __init__(self, screen, intensity, x, y):
+        self.meat_image = pygame.image.load('output-onlinepngtools (1).png')
+        self.bone_image = pygame.image.load('bone_gib.png')
+        self.current_image = pygame.image.load('bone_gib.png')
+        self.x = x
+        self.y = y
+        self.dx = random.randrange(-3, 3)
+        self.dy = random.randrange(-3, 3)
+        self.screen = screen
+        self.type = random.randrange(1, 3)
+        self.the_end = random.randrange(5, 30, 5)
+        if self.type == 1:
+            self.current_image = self.meat_image
+        else:
+            self.current_image = self.bone_image
+    def draw(self):
+        self.screen.blit(self.current_image, (self.x, self.y))
+    def move(self):
+        self.dx = random.randrange(-3, 3)
+        self.dy = random.randrange(-3, 3)
+        self.x += self.dx
+        self.y += self.dy + 1
+
+
+
+
+
+
+
+
+
+
 
 class Horde:
     def __init__(self, screen, num_enemies):
@@ -129,25 +213,28 @@ class Demonwing:
         self.x -= self.speed
         self.count += 1
 
-    # def spitfire(self):
-    #     flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
-    #     self.incinerate.append(flame)
-
-# class Hellfire:
-#     def __init__(self, screen, x, y, len, width, spd):
-#         self.screen = screen
-#         self.x = x
-#         self.y = y
-#         self.len = len
-#         self.width = width
-#         self.spd = spd
+    def spitfire(self):
+        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
+        self.incinerate.append(flame)
 #
-#     def move(self):
-#         self.x -= self.spd
-#
-#     def draw(self):
-#         pygame.draw.line(self.screen, (0, 250, 0), (self.x - self.len, self.y), (self.x, self.y), self.width)
+class Hellfire:
+    def __init__(self, screen, x, y, len, width, spd):
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.len = len
+        self.width = width
+        self.spd = spd
+        print("start")
 
+    def move(self):
+        self.x -= self.spd
+        print("move")
+
+    def draw(self):
+        print('pew!')
+        pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
+#
 
 def main():
     pygame.init()
@@ -165,7 +252,7 @@ def main():
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
     throng = Horde(screen, num_enemies)
-
+    offal = gibs(screen)
     while True:
         clock.tick(60)
         hero.draw()
@@ -176,8 +263,10 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
-                # bonnibel.spitfire()
-
+                bonnibel.spitfire()
+        for dink in bonnibel.incinerate:
+            dink.move()
+            dink.draw()
         screen.fill((0,0,0))
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
@@ -186,8 +275,8 @@ def main():
         # incanus.draw()
         bonnibel.move()
         bonnibel.draw()
-        # if bonnibel.count >= 0:
-        #     bonnibel.spitfire()
+        if bonnibel.count >= 0:
+            bonnibel.spitfire()
 
 
         throng.move()
@@ -201,6 +290,8 @@ def main():
             bullet.draw()
             hero.remove_dead_bullets()
         counter = 0
+        offal.move()
+        offal.draw()
         for demon in throng.horde:
             if demon.x < hero.image.get_width():
                 is_game_over = True
@@ -211,6 +302,12 @@ def main():
                     bullet.has_boomed = True
                     del throng.horde[counter]
                     scoreboard.score += 100
+                    for k in range(6):
+                        offal.make_gib(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
+
                 if bullet.has_boomed == True:
                     del bullet
 
@@ -241,3 +338,10 @@ def main():
 
 
 main()
+
+
+
+
+
+
+
