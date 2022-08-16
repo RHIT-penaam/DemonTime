@@ -271,6 +271,8 @@ def main():
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
                 # bonnibel.spitfire()
+            if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_r]:
+                main()
         if is_game_over:
             screen.blit(game_over_image, (500, 226))
             pygame.display.update()
@@ -281,6 +283,7 @@ def main():
         screen.fill((0,0,0))
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
+
         hero.draw()
         # incanus.move()
         # incanus.draw()
@@ -324,14 +327,9 @@ def main():
             counter = counter + 1
                 # del incanus
 
-
-            #
-
-
         if throng.is_defeated:
             num_enemies += 1
             throng = Horde(screen, num_enemies)
-
 
         if pressed_keys[pygame.K_UP]:
             hero.move(-5)
@@ -343,6 +341,7 @@ def main():
         if pressed_keys[pygame.K_z]:
             print(hero.bullets)
 
+        scoreboard.draw()
         pygame.display.update()
 
 
