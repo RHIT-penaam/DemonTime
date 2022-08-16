@@ -30,7 +30,7 @@ class MikeDemonSlayer:
 
 
 class Demon:
-    def __init__(self, screen, x, y, max_health, species):
+    def __init__(self, screen, x, y, max_health, species, step):
         self.screen = screen
         self.x = screen.get_width()
         self.y = random.randint(0, screen.get_height())
@@ -41,6 +41,7 @@ class Demon:
         self.max = max_health
         self.species = species
         self.is_dead = False
+        self.step = step
 
     def draw(self):
         if self.health // self.max > 0.5:
@@ -52,7 +53,7 @@ class Demon:
             self.is_dead = True
 
     def move(self):
-        self.x -= 4
+        self.x -= self.step
 
     def hit_by(self, bullet):
         hitbox = pygame.Rect(self.x, self.y, self.image_neut.get_width(), self.image_neut.get_height())
@@ -65,7 +66,7 @@ class Horde:
 
 #         Impliment death wail
         for d in range(10):
-            self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth"))
+            self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth", random.randrange(1, 5)))
     #
     @property
     def is_defeated(self):
@@ -120,7 +121,7 @@ def main():
     # screen.fill((100, 100, 100))
     # screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
-    incanus = Demon(screen, 1000, 200, 30, "teeth")
+    incanus = Demon(screen, 1000, 200, 30, "teeth", 4)
     throng = Horde(screen)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
 
