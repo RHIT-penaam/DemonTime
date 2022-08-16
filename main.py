@@ -116,7 +116,7 @@ def main():
     # background = pygame.image.load("unknown.png")
     pygame.display.set_caption("Mike's Rainy Day in Hell")
     is_game_over = False
-    screen = pygame.display.set_mode((1500, 780))
+    screen = pygame.display.set_mode((1500, 780))goo
     # screen.fill((100, 100, 100))
     # screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
