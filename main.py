@@ -63,7 +63,6 @@ class Demon:
 class Horde:
     def __init__(self, screen):
         self.horde = []
-
 #         Impliment death wail
         for d in range(10):
             self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth", random.randrange(1, 3, 1)))
@@ -81,7 +80,80 @@ class Horde:
             demon.draw()
 
     # Maybe implement a corpse cleaner upper, or maybe not
+class particle:
+    def __init__(self, screen, x, y, size, color):
+        self.x = x
+        self.y = y
+        self.screen = screen
+        self.size = size
+        self.color = color
+        self.the_end = 30
 
+    def draw(self):
+        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size)
+
+    def move(self):
+        self.x += random.randrange(-3, 3)
+        self.y += random.randrange(-3, 3) + 1
+class gibs:
+    def __init__(self, screen):
+        self.splatters = []
+        self.screen = screen
+        self.conut = 0
+        self.bloodlets = []
+
+    def make_gib(self, x, y):
+        tony = splatter(self.screen, 32, x, y)
+        self.splatters += [tony]
+
+    def make_blood(self, x, y):
+        antonio = particle(self.screen, x, y, 1, (255, 30, 40))
+        self.bloodlets += [antonio]
+
+    def move(self):
+        for splat in self.splatters:
+            splat.move()
+        for bleed in self.bloodlets:
+            bleed.move()
+
+    def draw(self):
+        self.conut = 0
+        for splat in self.splatters:
+            self.conut += 1
+            splat.draw()
+            splat.the_end -= 1
+            if splat.the_end <= 0:
+                del self.splatters[self.conut - 1]
+        self.conut = 0
+        for blood in self.bloodlets:
+            self.conut += 1
+            blood.draw()
+            blood.the_end -= 1
+
+
+class splatter:
+    def __init__(self, screen, intensity, x, y):
+        self.meat_image = pygame.image.load('output-onlinepngtools (1).png')
+        self.bone_image = pygame.image.load('bone_gib.png')
+        self.current_image = pygame.image.load('bone_gib.png')
+        self.x = x
+        self.y = y
+        self.dx = random.randrange(-3, 3)
+        self.dy = random.randrange(-3, 3)
+        self.screen = screen
+        self.type = random.randrange(1, 3)
+        self.the_end = random.randrange(5, 30, 5)
+        if self.type == 1:
+            self.current_image = self.meat_image
+        else:
+            self.current_image = self.bone_image
+    def draw(self):
+        self.screen.blit(self.current_image, (self.x, self.y))
+    def move(self):
+        self.dx = random.randrange(-3, 3)
+        self.dy = random.randrange(-3, 3)
+        self.x += self.dx
+        self.y += self.dy + 1
 class bullet_neutral:
     def __init__(self, hero, screen, x, y, speed, size, leng):
         self.screen = screen
@@ -124,7 +196,7 @@ def main():
     incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
     throng = Horde(screen)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
-
+    offal = gibs(screen)
 
     while True:
         clock.tick(60)
@@ -140,6 +212,7 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
         hero.draw()
+
         # incanus.move()
         # incanus.draw()
         throng.move()
@@ -153,6 +226,8 @@ def main():
             bullet.draw()
             hero.remove_dead_bullets()
         counter = 0
+        offal.move()
+        offal.draw()
         for demon in throng.horde:
             if demon.x < hero.image.get_width():
                 is_game_over = True
@@ -161,9 +236,15 @@ def main():
                     bullet.has_boomed = True
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
+                    for k in range(6):
+                        offal.make_gib(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
+                        offal.make_blood(throng.horde[counter].x, throng.horde[counter].y)
                     del throng.horde[counter]
+
                     scoreboard.score += 100
-                if bullet.has_boomed == True:
+                if bullet.has_boomed:
                     del bullet
 
                 # del incanus
@@ -189,5 +270,5 @@ def main():
 
 
 
-# I hate this
+# I hate this @ Agreed
 main()
