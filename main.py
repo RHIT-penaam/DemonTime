@@ -53,6 +53,8 @@ class Demon:
 
 
     def move(self):
+        beans = random.randrange(2, 6, 1)
+        self.step = random.randrange(0, beans, 1)
         self.x -= self.step
 
     def hit_by(self, bullet):
@@ -74,8 +76,8 @@ class particle:
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size)
         self.the_end -= 1
     def move(self):
-        self.x += random.randrange(-3, 3)
-        self.y += random.randrange(-3, 3) + 1
+        self.x += random.randrange(-4, 6)
+        self.y += random.randrange(-4, 4) + 1
 class gibs:
     def __init__(self, screen):
         self.splatters = []
