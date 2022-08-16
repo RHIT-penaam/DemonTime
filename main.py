@@ -113,12 +113,12 @@ class Scoreboard(object):
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    background = pygame.image.load("unknown.png")
+    # background = pygame.image.load("unknown.png")
     pygame.display.set_caption("Mike's Rainy Day in Hell")
     is_game_over = False
     screen = pygame.display.set_mode((1500, 780))
-    screen.fill((100, 100, 100))
-    screen.blit(background, (0, 0))
+    # screen.fill((100, 100, 100))
+    # screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth")
     throng = Horde(screen)
@@ -128,13 +128,14 @@ def main():
     while True:
         clock.tick(60)
         hero.draw()
-        screen.blit(background, (0, 0))
+        # screen.blit(background, (0, 0))
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
+        screen.fill((0,0,0))
         pressed_keys = pygame.key.get_pressed()
         scoreboard = Scoreboard(screen)
         hero.draw()
