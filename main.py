@@ -217,27 +217,29 @@ class Demonwing:
         self.x -= self.speed
         self.count += 1
 
-    def spitfire(self):
-        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
-        self.incinerate.append(flame)
+#     def spitfire(self):
+#         flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
+#         self.incinerate.append(flame)
+# #
+# class Hellfire:
+#     def __init__(self, screen, x, y, len, width, spd):
 #
-class Hellfire:
-    def __init__(self, screen, x, y, len, width, spd):
-        self.screen = screen
-        self.x = x
-        self.y = y
-        self.len = len
-        self.width = width
-        self.spd = spd
-        print("start")
+#         self.screen = screen
+#         self.x = x
+#         self.y = y
+#         self.len = len
+#         self.width = width
+#         self.spd = spd
+#         print("start")
+#
+#     def move(self):
+#         self.x -= self.spd
+#         print("move")
+#
+#     def draw(self):
+#         print('pew!')
+#         pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
 
-    def move(self):
-        self.x -= self.spd
-        print("move")
-
-    def draw(self):
-        print('pew!')
-        pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
 #
 
 def main():
@@ -255,6 +257,7 @@ def main():
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
+
     throng = Horde(screen, num_enemies)
     offal = gibs(screen)
     while True:
@@ -267,7 +270,11 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
-                bonnibel.spitfire()
+                # bonnibel.spitfire()
+        if is_game_over:
+            screen.blit(game_over_image, (500, 226))
+            pygame.display.update()
+            continue
         for dink in bonnibel.incinerate:
             dink.move()
             dink.draw()
@@ -279,16 +286,16 @@ def main():
         # incanus.draw()
         bonnibel.move()
         bonnibel.draw()
-        if bonnibel.count >= 0:
-            bonnibel.spitfire()
+        # if bonnibel.count >= 0:
+        #     bonnibel.spitfire()
 
 
         throng.move()
         throng.draw()
-        if is_game_over:
-            screen.blit(game_over_image, (500, 226))
-            pygame.display.update()
-            continue
+        # if is_game_over:
+        #     screen.blit(game_over_image, (500, 226))
+        #     pygame.display.update()
+        #     continue
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
@@ -335,6 +342,7 @@ def main():
             print("down")
         if pressed_keys[pygame.K_z]:
             print(hero.bullets)
+
         pygame.display.update()
 
 
