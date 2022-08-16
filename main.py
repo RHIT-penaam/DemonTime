@@ -34,7 +34,7 @@ class Demon:
         self.screen = screen
         self.x = screen.get_width()
         self.y = random.randint(0, screen.get_height())
-        self.image_neut = pygame.image.load('Goofy_Mouth_Boy.png')
+        self.image_neut = pygame.image.load('transparent demon')
         self.image_bloodied = pygame.image.load('nipple_boy_transparent')
         self.image_dead = pygame.image.load('nipple_boy_transparent')
         self.health = max_health
@@ -66,7 +66,7 @@ class Horde:
 
 #         Impliment death wail
         for d in range(10):
-            self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth", random.randrange(1, 5)))
+            self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth", random.randrange(1, 3, 1)))
     #
     @property
     def is_defeated(self):
@@ -121,7 +121,7 @@ def main():
     # screen.fill((100, 100, 100))
     # screen.blit(background, (0, 0))
     hero = MikeDemonSlayer(screen, 20, 590)
-    incanus = Demon(screen, 1000, 200, 30, "teeth", 4)
+    incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
     throng = Horde(screen)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
 
