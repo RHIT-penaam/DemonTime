@@ -255,6 +255,7 @@ def main():
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
+
     throng = Horde(screen, num_enemies)
     offal = gibs(screen)
     while True:
@@ -268,6 +269,10 @@ def main():
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
                 # bonnibel.spitfire()
+        if is_game_over:
+            screen.blit(game_over_image, (500, 226))
+            pygame.display.update()
+            continue
         for dink in bonnibel.incinerate:
             dink.move()
             dink.draw()
@@ -285,10 +290,10 @@ def main():
 
         throng.move()
         throng.draw()
-        if is_game_over:
-            screen.blit(game_over_image, (500, 226))
-            pygame.display.update()
-            continue
+        # if is_game_over:
+        #     screen.blit(game_over_image, (500, 226))
+        #     pygame.display.update()
+        #     continue
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
@@ -335,6 +340,7 @@ def main():
             print("down")
         if pressed_keys[pygame.K_z]:
             print(hero.bullets)
+
         pygame.display.update()
 
 
