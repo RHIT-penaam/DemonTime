@@ -273,7 +273,8 @@ def main():
     throng = Horde(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
-
+    main_title = pygame.image.load('pixil-frame-0 (1).png')
+    screen.blit(main_title, (500,100))
     while True:
         clock.tick(60)
         hero.draw()
@@ -294,6 +295,7 @@ def main():
             continue
 
         screen.fill((0, 0, 0))
+        screen.blit(main_title, (500, 100))
         pressed_keys = pygame.key.get_pressed()
 
         hero.draw()
