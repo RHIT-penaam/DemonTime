@@ -61,12 +61,13 @@ class Demon:
 
 
 class Horde:
-    def __init__(self, screen):
+    def __init__(self, screen, num_enemies):
         self.horde = []
 
 #         Impliment death wail
-        for d in range(10):
-            self.horde.append(Demon(screen, 1200, random.randrange(200, 300), 30, "mouth", random.randrange(1, 3, 1)))
+        for h in range(num_enemies):
+            for d in range(10):
+                self.horde.append(Demon(screen, 1200 * d, random.randrange(200, 300) * h, 30, "mouth", random.randrange(1, 3, 1)))
     #
     @property
     def is_defeated(self):
@@ -160,9 +161,10 @@ def main():
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
     bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
-    throng = Horde(screen)
+    # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
-
+    num_enemies = 1
+    throng = Horde(screen, num_enemies)
 
     while True:
         clock.tick(60)
@@ -218,6 +220,9 @@ def main():
             #
 
 
+        if throng.is_defeated:
+            num_enemies += 1
+            throng = Horde(screen, num_enemies)
 
 
         if pressed_keys[pygame.K_UP]:
