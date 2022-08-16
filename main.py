@@ -215,27 +215,29 @@ class Demonwing:
         self.x -= self.speed
         self.count += 1
 
-    def spitfire(self):
-        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
-        self.incinerate.append(flame)
+#     def spitfire(self):
+#         flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
+#         self.incinerate.append(flame)
+# #
+# class Hellfire:
+#     def __init__(self, screen, x, y, len, width, spd):
 #
-class Hellfire:
-    def __init__(self, screen, x, y, len, width, spd):
-        self.screen = screen
-        self.x = x
-        self.y = y
-        self.len = len
-        self.width = width
-        self.spd = spd
-        print("start")
+#         self.screen = screen
+#         self.x = x
+#         self.y = y
+#         self.len = len
+#         self.width = width
+#         self.spd = spd
+#         print("start")
+#
+#     def move(self):
+#         self.x -= self.spd
+#         print("move")
+#
+#     def draw(self):
+#         print('pew!')
+#         pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
 
-    def move(self):
-        self.x -= self.spd
-        print("move")
-
-    def draw(self):
-        print('pew!')
-        pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
 #
 
 def main():
@@ -265,7 +267,7 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
-                bonnibel.spitfire()
+                # bonnibel.spitfire()
         for dink in bonnibel.incinerate:
             dink.move()
             dink.draw()
@@ -277,8 +279,8 @@ def main():
         # incanus.draw()
         bonnibel.move()
         bonnibel.draw()
-        if bonnibel.count >= 0:
-            bonnibel.spitfire()
+        # if bonnibel.count >= 0:
+        #     bonnibel.spitfire()
 
 
         throng.move()
