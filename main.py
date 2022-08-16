@@ -283,9 +283,7 @@ def main():
             screen.blit(instructions_image, (500, 500))
             pygame.display.update()
             continue
-        for dink in bonnibel.incinerate:
-            dink.move()
-            dink.draw()
+
         screen.fill((0,0,0))
         pressed_keys = pygame.key.get_pressed()
 
@@ -297,7 +295,9 @@ def main():
         bonnibel.draw()
         # if bonnibel.count >= 0:
         #     bonnibel.spitfire()
-
+        for dink in bonnibel.incinerate:
+            dink.move()
+            dink.draw()
 
         throng.move()
         throng.draw()
