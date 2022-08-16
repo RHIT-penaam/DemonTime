@@ -251,15 +251,20 @@ def main():
     screen = pygame.display.set_mode((1500, 780))
     # screen.fill((100, 100, 100))
     # screen.blit(background, (0, 0))
+    font = pygame.font.Font(None, 25)
+    instruction_text = 'press r to play again...'
+    text_color = (255, 0, 0)
+    instructions_image = font.render(instruction_text, True, text_color)
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
     bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
-
     throng = Horde(screen, num_enemies)
     offal = gibs(screen)
+    scoreboard = Scoreboard(screen)
+
     while True:
         clock.tick(60)
         hero.draw()
@@ -275,6 +280,7 @@ def main():
                 main()
         if is_game_over:
             screen.blit(game_over_image, (500, 226))
+            screen.blit(instructions_image, (500, 500))
             pygame.display.update()
             continue
         for dink in bonnibel.incinerate:
@@ -282,7 +288,7 @@ def main():
             dink.draw()
         screen.fill((0,0,0))
         pressed_keys = pygame.key.get_pressed()
-        scoreboard = Scoreboard(screen)
+
 
         hero.draw()
         # incanus.move()
@@ -315,6 +321,7 @@ def main():
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
                     scoreboard.score += 100
+
                     for k in range(6):
                         offal.make_gib(demon.x, demon.y)
                         offal.make_blood(demon.x, demon.y)
