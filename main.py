@@ -385,7 +385,7 @@ def main():
 
         if pressed_keys[pygame.K_UP]:
             hero.move(-5)
-            print("up")
+            print("up butt")
 
         if pressed_keys[pygame.K_DOWN]:
             hero.move(5)
