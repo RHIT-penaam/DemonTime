@@ -274,7 +274,7 @@ class Necromancer:
             self.current_skin = self.raised_skin
         elif self.state == 3:
             self.current_skin = self.power_skin
-            wallace = skelle(self.screen, self.x, self.y)
+            wallace = Skelle(self.screen, self.x + random.randrange(-30, 30), self.y + random.randrange(-70, 80))
             self.flock.append(wallace)
             wait += 1
             if wait > 4:
@@ -287,22 +287,22 @@ class Necromancer:
         self.screen.blit(self.current_skin, (self.x, self.y))
 
 
-class skelle:
+class Skelle:
     def __init__(self, screen, x, y):
         self.x = x
         self.y = y
         self.screen = screen
-        self.normal_sprite = pygame.image.load("skeleton_crawl.png")
-        self.broken_sprite = pygame.image.load('skeleton_lurch.png')
+        self.normal_sprite = pygame.image.load("Skeleton_lurch.png")
+        self.broken_sprite = pygame.image.load('Skeleton_crawl.png')
         self.current_sprite = self.normal_sprite
         self.health = 2
         self.speed = 2
 
     def draw(self):
-        self.screen.blit(self.current_sprite, (self.x, self.y))
+        self.screen.blit(self.normal_sprite, (self.x, self.y))
 
     def move(self):
-        self.x -= self.speed
+        self.x -= 1
 
     def hit_by(self, bullet):
         hitbox = pygame.Rect(self.x, self.y, self.normal_sprite.get_width(), self.normal_sprite.get_height())
@@ -339,12 +339,19 @@ def main():
     main_title = pygame.image.load('pixil-frame-0 (1).png')
     screen.blit(main_title, (500,100))
     moloch = Necromancer(screen, 1000, hero.y)
+    ronald = Skelle(screen, moloch.x, moloch.y)
+    nub = 0
     while True:
         clock.tick(60)
+        screen.fill((0, 0, 0))
         hero.draw()
+        ronald.draw()
+        ronald.move()
         # screen.blit(background, (0, 0))
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
+            if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_ESCAPE]:
+                sys.exit()
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
@@ -361,10 +368,7 @@ def main():
             skeleton.draw()
             skeleton.move()
 
-        ronald = skelle(screen, 500, 200)
-        ronald.draw()
-        ronald.move()
-        screen.fill((0, 0, 0))
+
         # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
         moloch.wind_up()
@@ -416,7 +420,16 @@ def main():
                     del bullet
             counter = counter + 1
             # del incanus
+        nub = 0
+        for skeleton in moloch.flock:
 
+            for bullet in hero.bullets:
+                if skeleton.hit_by(bullet):
+                    bullet.has_boomed = True
+                    scoreboard.score += 10
+                    del bullet
+                    del moloch.flock[nub]
+            nub = nub + 1
         if throng.is_defeated:
             num_enemies += 1
             throng = Horde(screen, num_enemies)
