@@ -251,6 +251,37 @@ class Hellfire:
 
 #
 
+class Necromancer:
+    def __init__(self, screen, x, y):
+        self.screen = screen
+        self.neutral_skin = pygame.image.load("Necromancer_neutral.png")
+        self.raised_skin = pygame.image.load("Necromancer_hands.png")
+        self.power_skin = pygame.image.load("Necromancer_power.png")
+        self.current_skin = self.neutral_skin
+        self.state = 0
+        self.x = x
+        self.y = y
+        self.flock = []
+        self.ned = 1
+    def wind_up(self):
+        wait = 0
+        self.ned = random.randrange(1, 50)
+        if self.ned == 3:
+            self.state += 1
+        if self.state == 0:
+            self.current_skin = self.neutral_skin
+        elif self.state == 1:
+            self.current_skin = self.raised_skin
+        elif self.state == 3:
+            self.current_skin = self.power_skin
+                # SUMMON HERE
+            wait += 1
+            if wait > 4:
+                self.state = 0
+        elif self.state > 3:
+                self.state = 0
+    def draw(self, y):
+        self.screen.blit(self.current_skin, (self.x, y))
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -275,6 +306,7 @@ def main():
     scoreboard = Scoreboard(screen)
     main_title = pygame.image.load('pixil-frame-0 (1).png')
     screen.blit(main_title, (500,100))
+    moloch = Necromancer(screen, 1000, hero.y)
     while True:
         clock.tick(60)
         hero.draw()
@@ -297,6 +329,9 @@ def main():
         screen.fill((0, 0, 0))
         # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
+        moloch.wind_up()
+        moloch.draw(hero.y)
+
 
         hero.draw()
         # incanus.move()
