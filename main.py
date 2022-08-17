@@ -295,7 +295,7 @@ def main():
             continue
 
         screen.fill((0, 0, 0))
-        screen.blit(main_title, (500, 100))
+        # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
 
         hero.draw()
