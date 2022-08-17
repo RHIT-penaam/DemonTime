@@ -274,14 +274,46 @@ class Necromancer:
             self.current_skin = self.raised_skin
         elif self.state == 3:
             self.current_skin = self.power_skin
-                # SUMMON HERE
+            wallace = skelle(self.screen, self.x, self.y)
+            self.flock.append(wallace)
             wait += 1
             if wait > 4:
                 self.state = 0
         elif self.state > 3:
-                self.state = 0
+            self.state = 0
+
     def draw(self, y):
-        self.screen.blit(self.current_skin, (self.x, y))
+        self.y = y
+        self.screen.blit(self.current_skin, (self.x, self.y))
+
+
+class skelle:
+    def __init__(self, screen, x, y):
+        self.x = x
+        self.y = y
+        self.screen = screen
+        self.normal_sprite = pygame.image.load("skeleton_crawl.png")
+        self.broken_sprite = pygame.image.load('skeleton_lurch.png')
+        self.current_sprite = self.normal_sprite
+        self.health = 2
+        self.speed = 2
+
+    def draw(self):
+        self.screen.blit(self.current_sprite, (self.x, self.y))
+
+    def move(self):
+        self.x -= self.speed
+
+    def hit_by(self, bullet):
+        hitbox = pygame.Rect(self.x, self.y, self.normal_sprite.get_width(), self.normal_sprite.get_height())
+        if hitbox.collidepoint(bullet.x, bullet.y):
+            self.health -= 1
+            self.current_sprite = self.broken_sprite
+            self.speed = 1
+            if self.health <= 0:
+                return True
+        else:
+            return False
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -325,7 +357,13 @@ def main():
             screen.blit(instructions_image, (500, 500))
             pygame.display.update()
             continue
+        for skeleton in moloch.flock:
+            skeleton.draw()
+            skeleton.move()
 
+        ronald = skelle(screen, 500, 200)
+        ronald.draw()
+        ronald.move()
         screen.fill((0, 0, 0))
         # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
