@@ -602,7 +602,7 @@ def main_menu():
                 print(click_pos)
                 if 656 < event.pos[0] < 842 and 578 < event.pos[1] < 637:
                     main()
-                if 670 < event.pos[1] < 680 and 640 < event.pos[0] < 870:
+                if 670 < event.pos[1] < 685 and 640 < event.pos[0] < 875:
                     instructions()
         screen.fill(pygame.Color("Black"))
         screen.blit(instructions_image, (640, 670))
@@ -631,9 +631,9 @@ def instructions():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 main()
         screen.fill(pygame.Color("black"))
-        screen.blit(go_to_game, (500, 500))
         screen.blit(line1, (590, 100))
         screen.blit(line2, (250, 150))
+        screen.blit(go_to_game, (600, 500))
         pygame.display.update()
 
 main_menu()
