@@ -159,6 +159,8 @@ class Horde:
                 self.horde.append(
                     Demon(screen, 1200 * d, random.randrange(200, 300) * h, 30, "mouth", random.randrange(1, 3, 1)))
 
+
+
     #
     @property
     def is_defeated(self):
@@ -208,10 +210,9 @@ class Scoreboard(object):
 
 
 class Demonwing:
-    def __init__(self, screen, x, y, max_health, species, speed):
+    def __init__(self, screen, x, y, max_health, speed):
         self.screen = screen
         self.max_health = max_health
-        self.species = species
         self.speed = speed
         self.x = x
         self.y = y
@@ -228,6 +229,8 @@ class Demonwing:
     def spitfire(self):
         flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
         self.incinerate.append(flame)
+    # def hit_by(self):
+        # hitbox = pygame.Rect(self.x, self.y, )
 
 
 #
@@ -317,11 +320,29 @@ class Skelle:
         else:
             return False
 
+class Fleet:
+    def __init__(self, screen, num_enemies):
+        self.fleet = []
+        for h in range(num_enemies):
+            for k in range(5):
+                self.fleet.append(Demonwing(screen, 1100 + random.randint(100, 200), random.randrange(200, 800), 20, random.randrange(3, 4, 1)))
+
+    @property
+    def is_defeated(self):
+        return len(self.fleet) == 0
+
+    def move(self):
+        for demon in self.fleet:
+            demon.move()
+
+    def draw(self):
+        for demon in self.fleet:
+            demon.draw()
 
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    # background = pygame.image.load("unknown.png")
+    # background = pygame.image.load("unknown.png") | we need a background
     pygame.display.set_caption("Mike's Rainy Day in Hell")
     is_game_over = False
     screen = pygame.display.set_mode((1500, 780))
@@ -333,11 +354,12 @@ def main():
     instructions_image = font.render(instruction_text, True, text_color)
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
-    bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
+    # bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
     throng = Horde(screen, num_enemies)
+    gargoyle = Fleet(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
     moloch = Necromancer(screen, 1000, hero.y)
@@ -378,16 +400,20 @@ def main():
         hero.draw()
         # incanus.move()
         # incanus.draw()
-        bonnibel.move()
-        bonnibel.draw()
-        if bonnibel.count >= 0:
-            bonnibel.spitfire()
-        for dink in bonnibel.incinerate:
-            dink.move()
-            dink.draw()
+        # bonnibel.move()
+        # bonnibel.draw()
+        # if bonnibel.count >= 0:
+        #     bonnibel.spitfire()
+        # for dink in bonnibel.incinerate:
+        #     dink.move()
+        #     dink.draw()
 
         throng.move()
         throng.draw()
+
+        gargoyle.move()
+        gargoyle.draw()
+        #
         # if is_game_over:
         #     screen.blit(game_over_image, (500, 226))
         #     pygame.display.update()
@@ -417,6 +443,7 @@ def main():
                         offal.make_blood(demon.x, demon.y)
                     del throng.horde[counter]
                     del bullet
+
             counter = counter + 1
             # del incanus
         nub = 0
@@ -472,3 +499,4 @@ def main_menu():
 
 
 main_menu()
+
