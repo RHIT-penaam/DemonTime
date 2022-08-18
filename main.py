@@ -603,6 +603,32 @@ def main_menu():
         screen.blit(main_title, (500, 10))
         pygame.display.update()
 
+def instructions():
+    pygame.init()
+    screen = pygame.display.set_mode((1500, 780))
+    pygame.display.set_caption("DEMON TIME")
+    font = pygame.font.Font(None, 25)
+    instruction_text = 'Demons are coming to harvest your organs! Use the arrows to move up/down and then SHOOT them by hitting space!'
+    text_color = (255, 0, 0)
+    instructions_image = font.render(instruction_text, True, text_color)
+    main_title = pygame.image.load('pixil-frame-0_5.png')
+    sick_demon_skull = pygame.image.load('ogre.png')
+    sick_demon_skull.set_colorkey((255, 255, 255))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                main_menu()
+        screen.fill(pygame.Color("Black"))
+        screen.blit(instructions_image, (300, 670))
+        screen.blit(sick_demon_skull, (625, 200))
+        screen.blit(main_title, (500, 10))
+        pygame.display.update()
 
+
+
+
+instructions()
 main_menu()
 
