@@ -282,7 +282,7 @@ class Necromancer:
             self.current_skin = self.power_skin
             wallace = Skelle(self.screen, self.x + random.randrange(-30, 30), self.y + random.randrange(-70, 80))
             if ayn == 5:
-                # self.flock.append(wallace)
+                self.flock.append(wallace)
                 bears = "bears"
             wait += 1
             if wait > 2:
@@ -428,7 +428,7 @@ def main():
     text_color = (255, 0, 0)
     instructions_image = font.render(instruction_text, True, text_color)
     hero = MikeDemonSlayer(screen, 20, 590)
-    incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
+    # incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
     # bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
@@ -475,7 +475,7 @@ def main():
         moloch.wind_up()
         moloch.draw(hero.y)
         army.draw()
-        # army.check_skin()
+        army.check_skin()
         army.move()
 
         hero.draw()
@@ -560,7 +560,8 @@ def main():
                             army.group[bub].check_skin()
                             army.group[bub].health -= 1
                         else:
-                            del army.group[bub]
+                            if len(army.group) > bub:
+                                del army.group[bub]
                 bub = bub + 1
 
 
