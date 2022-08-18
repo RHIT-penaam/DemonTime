@@ -448,5 +448,23 @@ def main():
         pygame.display.update()
 
 
-main()
-# doodoobutter
+def main_menu():
+    pygame.init()
+    screen = pygame.display.set_mode((400, 400))
+    pygame.display.set_caption("DEMON TIME")
+    font = pygame.font.Font(None, 25)
+    instruction_text = 'click anywhere to start the slaughter...'
+    text_color = (255, 0, 0)
+    instructions_image = font.render(instruction_text, True, text_color)
+    main_title = pygame.image.load('pixil-frame-0 (1).png')
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                main()
+        screen.fill(pygame.Color("Black"))
+        screen.blit(instructions_image, (0, 375))
+        screen.blit(main_title, (-30, 10))
+        pygame.display.update()
+main_menu()
