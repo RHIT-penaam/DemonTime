@@ -210,6 +210,7 @@ class Scoreboard(object):
 
 
 class Demonwing:
+
     def __init__(self, screen, x, y, max_health, speed):
         self.screen = screen
         self.max_health = max_health
@@ -224,13 +225,20 @@ class Demonwing:
 
     def move(self):
         self.x -= self.speed
-        self.count += 1
+
 
     def spitfire(self):
-        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
-        self.incinerate.append(flame)
+        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 5)
+        self.count += 1
+        if self.count % 5 == 0:
+            self.incinerate.append(flame)
     # def hit_by(self):
         # hitbox = pygame.Rect(self.x, self.y, )
+
+    def remove_dead_bullets(self):
+        for k in range(len(self.incinerate) - 1, - 1, - 1):
+            if self.incinerate[k].has_boomed or self.incinerate[k].x > 1500:
+                del self.incinerate[k]
 
 
 #
@@ -250,7 +258,7 @@ class Hellfire:
 
     def draw(self):
         print('pew!')
-        pygame.draw.line(self.screen, (1, 250, 1), (self.x - self.len, self.y), (self.x + 4, self.y), self.width)
+        pygame.draw.line(self.screen, (1, 250, 1), (self.x, self.y), (self.x - self.len, self.y), self.width)
 
 
 #
@@ -321,24 +329,6 @@ class Skelle:
         else:
             return False
 
-class Fleet:
-    def __init__(self, screen, num_enemies):
-        self.fleet = []
-        for h in range(num_enemies):
-            for k in range(5):
-                self.fleet.append(Demonwing(screen, 1100 + random.randint(100, 200), random.randrange(200, 800), 20, random.randrange(3, 4, 1)))
-
-    @property
-    def is_defeated(self):
-        return len(self.fleet) == 0
-
-    def move(self):
-        for demon in self.fleet:
-            demon.move()
-
-    def draw(self):
-        for demon in self.fleet:
-            demon.draw()
 
 class Tank:
     def __init__(self, screen, x, y):
@@ -429,12 +419,12 @@ def main():
     instructions_image = font.render(instruction_text, True, text_color)
     hero = MikeDemonSlayer(screen, 20, 590)
     incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
-    # bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
+    bonnibel = Demonwing(screen, 1100, random.randrange(200, 800), 20, 3)
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
     throng = Horde(screen, num_enemies)
-    gargoyle = Fleet(screen, num_enemies)
+
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
     moloch = Necromancer(screen, 1000, hero.y)
@@ -467,10 +457,9 @@ def main():
         for skeleton in moloch.flock:
             skeleton.draw()
             skeleton.move()
-        for mob in gargoyle.fleet:
-            mob.spitfire()
 
-        # screen.blit(main_title, (500, 100)) put this in the main menu David
+
+
         pressed_keys = pygame.key.get_pressed()
         moloch.wind_up()
         moloch.draw(hero.y)
@@ -481,19 +470,22 @@ def main():
         hero.draw()
         # incanus.move()
         # incanus.draw()
-        # bonnibel.move()
-        # bonnibel.draw()
-        # if bonnibel.count >= 0:
-        #     bonnibel.spitfire()
-        # for dink in bonnibel.incinerate:
-        #     dink.move()
-        #     dink.draw()
+        bonnibel.move()
+        bonnibel.draw()
+        if bonnibel.x < 0:
+            bonnibel.x = 1600
+            bonnibel.y = random.randrange(200, 700)
+            bonnibel.move()
+            bonnibel.draw()
+            # bonnibel.spitfire()
+        for dink in bonnibel.incinerate:
+            dink.move()
+            dink.draw()
+
 
         throng.move()
         throng.draw()
 
-        gargoyle.move()
-        gargoyle.draw()
         #
         # if is_game_over:
         #     screen.blit(game_over_image, (500, 226))
@@ -503,6 +495,8 @@ def main():
             bullet.move()
             bullet.draw()
             hero.remove_dead_bullets()
+
+
 
         offal.move()
         offal.draw()
@@ -526,6 +520,9 @@ def main():
                     del bullet
 
             counter = counter + 1
+
+
+
             # del incanus
         nub = 0
         for skeleton in moloch.flock:
