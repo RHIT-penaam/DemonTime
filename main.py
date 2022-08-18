@@ -36,8 +36,8 @@ class Demon:
         self.screen = screen
         self.x = screen.get_width()
         self.y = random.randint(0, screen.get_height())
-        self.image_current = pygame.image.load('transparent demon')
-        self.image_neut = pygame.image.load('transparent demon')
+        self.image_current = pygame.image.load('transparent demon new')
+        self.image_neut = pygame.image.load('transparent demon new')
         self.image_bloodied = pygame.image.load('nipple_boy_transparent')
         self.image_dead = pygame.image.load('nipple_boy_transparent')
         self.health = max_health
@@ -520,6 +520,7 @@ def main():
         if is_game_over:
             screen.blit(game_over_image, (500, 226))
             screen.blit(instructions_image, (500, 500))
+            scoreboard.draw()
             pygame.display.update()
             continue
         for skeleton in moloch.flock:
@@ -576,8 +577,7 @@ def main():
             for bullet in hero.bullets:
                 if bullet.x >= screen.get_width():
                     bullet.has_boomed = True
-                if demon.x < -50:
-                    del throng.horde[counter]
+
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
                     scoreboard.score += 100
