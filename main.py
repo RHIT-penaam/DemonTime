@@ -658,6 +658,7 @@ def main_menu():
     main_title = pygame.image.load('pixil-frame-0_5.png')
     sick_demon_skull = pygame.image.load('BIG_DEMON_TIME.png')
     sick_demon_skull.set_colorkey((255, 255, 255))
+    bertie = "the best dog ever"
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
