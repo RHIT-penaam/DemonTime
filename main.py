@@ -29,6 +29,9 @@ class MikeDemonSlayer:
         for k in range(len(self.bullets) - 1, - 1, - 1):
             if self.bullets[k].has_boomed or self.bullets[k].x > 1500:
                 del self.bullets[k]
+    def hit_by_generic(self, bullet):
+        hitbox = pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
+        return hitbox.collidepoint(bullet.x, bullet.y)
 
 
 class Demon:
@@ -173,6 +176,11 @@ class Horde:
     def draw(self):
         for demon in self.horde:
             demon.draw()
+
+    def clean_up_time(self):
+        for k in range(len(self.horde) - 1, - 1, - 1):
+            if self.horde[k].is_dead:
+                del self.horde[k]
 
     # Maybe implement a corpse cleaner upper, or maybe not
 
@@ -407,29 +415,36 @@ class Tank:
             if bees == 9:
                 if birds == 1:
                     self.speed = 1
-                    self.wiggle = 2
+                    self.wiggle = 1
                     self.current_skin = self.image_blood_neutral
-                    if hero.y > self.y:
-                        self.y += 1
-                    elif hero.y < self.y:
-                        self.y -= 1
+                    self.charging = False
+                    if self.x > 20:
+                        if hero.y > self.y:
+                            self.y += 3
+                        elif hero.y < self.y:
+                            self.y -= 3
 
                 else:
                     self.speed = 2
-                    self.wiggle = 3
+                    self.wiggle = 2
                     self.current_skin = self.image_blood_charge
-                    if hero.y > self.y:
-                        self.y += 2
-                    elif hero.y < self.y:
-                        self.y -= 2
+                    self.charging = True
+                    if self.x > 20:
+                        if hero.y > self.y:
+                            self.y += 5
+                        elif hero.y < self.y:
+                            self.y -= 5
 
     def draw(self):
         self.screen.blit(self.current_skin, (self.x, self.y))
 
     def move(self):
-        self.x -= self.speed
+        if self.x > 20:
+            self.x -= self.speed
+        elif self.charging:
+            self.x -= self.speed
         if self.wiggle > 0:
-            self.y += random.randrange(-self.wiggle, self.wiggle)
+            self.y += random.randrange(-self.wiggle, self.wiggle + 1)
 
 
     def hit_by(self, bullet):
@@ -461,13 +476,23 @@ class Tank_Group:
         for tank in self.group:
             tank.check_skin(hero)
 
+    def check_boundry(self, hero):
+        for k in range(len(self.group) - 1, - 1, - 1):
+            if self.group[k].x < hero.image.get_width():
+                if hero.y > self.group[k].y:
+                    self.group[k].y += 2
+                elif hero.y <= self.group[k].y:
+                    self.group[k].y -= 2
+
+
     def remove_dead_tanks(self):
         for k in range(len(self.group) - 1, - 1, - 1):
-            if self.group[k].is_dead or self.group[k].x < 0:
+            if self.group[k].is_dead:
                 del self.group[k]
     def shooty(self):
         for tank in self.group:
             tank.fire_gun()
+            # HEREHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEH
 
 def main():
     pygame.init()
@@ -582,7 +607,8 @@ def main():
                         offal.make_blood(demon.x, demon.y)
                         offal.make_blood(demon.x, demon.y)
                         offal.make_blood(demon.x, demon.y)
-                    del throng.horde[counter]
+                    demon.is_dead = True
+                    throng.clean_up_time()
                     # del bullet
 
             counter = counter + 1
@@ -624,9 +650,12 @@ def main():
                         tank_demon.check_skin(hero)
                     else:
                         tank_demon.check_skin(hero)
-                        tank_demon.health -= 4
+                        tank_demon.health -= 2
                     if tank_demon.health <= 5:
                         tank_demon.is_dead = True
+            for bulette in tank_demon.bullets:
+                if hero.hit_by_generic(bulette):
+                    is_game_over = True
 
 
 
