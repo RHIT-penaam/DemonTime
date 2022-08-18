@@ -263,6 +263,7 @@ class Necromancer:
         self.y = y
         self.flock = []
         self.ned = 1
+
     def wind_up(self):
         wait = 0
         self.ned = random.randrange(1, 50)
@@ -314,6 +315,8 @@ class Skelle:
                 return True
         else:
             return False
+
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -336,8 +339,6 @@ def main():
     throng = Horde(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
-    main_title = pygame.image.load('pixil-frame-0 (1).png')
-    screen.blit(main_title, (500,100))
     moloch = Necromancer(screen, 1000, hero.y)
     ronald = Skelle(screen, moloch.x, moloch.y)
     nub = 0
@@ -368,12 +369,10 @@ def main():
             skeleton.draw()
             skeleton.move()
 
-
         # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
         moloch.wind_up()
         moloch.draw(hero.y)
-
 
         hero.draw()
         # incanus.move()
@@ -450,13 +449,15 @@ def main():
 
 def main_menu():
     pygame.init()
-    screen = pygame.display.set_mode((400, 400))
+    screen = pygame.display.set_mode((1500, 780))
     pygame.display.set_caption("DEMON TIME")
     font = pygame.font.Font(None, 25)
     instruction_text = 'click anywhere to start the slaughter...'
     text_color = (255, 0, 0)
     instructions_image = font.render(instruction_text, True, text_color)
-    main_title = pygame.image.load('pixil-frame-0 (1).png')
+    main_title = pygame.image.load('pixil-frame-0_5.png')
+    sick_demon_skull = pygame.image.load('BIG_DEMON_TIME.png')
+    sick_demon_skull.set_colorkey((255, 255, 255))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -464,7 +465,10 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 main()
         screen.fill(pygame.Color("Black"))
-        screen.blit(instructions_image, (0, 375))
-        screen.blit(main_title, (-30, 10))
+        screen.blit(instructions_image, (590, 670))
+        screen.blit(sick_demon_skull, (460, 200))
+        screen.blit(main_title, (500, 10))
         pygame.display.update()
+
+
 main_menu()
