@@ -351,25 +351,6 @@ class Skelle:
         hitbox = pygame.Rect(self.x, self.y, self.normal_sprite.get_width(), self.normal_sprite.get_height())
         return hitbox.collidepoint(bullet.x, bullet.y)
 
-# class Fleet:
-#     def __init__(self, screen, num_enemies):
-#         self.fleet = []
-#         for h in range(num_enemies):
-#             for k in range(5):
-#                 self.fleet.append(Demonwing(screen, 1100 + random.randint(100, 200), random.randrange(200, 800), 20, random.randrange(3, 4, 1)))
-
-    # @property
-    # def is_defeated(self):
-    #     return len(self.fleet) == 0
-    #
-    # def move(self):
-    #     for demon in self.fleet:
-    #         demon.move()
-    #
-    # def draw(self):
-    #     for demon in self.fleet:
-    #         demon.draw()
-    #
 
 class Tank:
     def __init__(self, screen, x, y):
@@ -458,10 +439,9 @@ class Tank_Group:
         self.screen = screen
         self.num_waves = num_waves
         for h in range(num_waves):
-            if h >= 1:
-                for g in range(int(quantity)):
-                    jim = Tank(self.screen, (1400 + random.randrange(-200, 200)), (random.randrange(200, 600)))
-                    self.group.append(jim)
+            for g in range(int(quantity)):
+                jim = Tank(self.screen, (1400 + random.randrange(-200, 200)), (random.randrange(200, 600)))
+                self.group.append(jim)
     @property
     def is_defeated(self):
         return len(self.group) == 0
@@ -500,37 +480,25 @@ class Tank_Group:
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    # background = pygame.image.load("unknown.png") | we need a background
     pygame.display.set_caption("Mike's Rainy Day in Hell")
     is_game_over = False
     screen = pygame.display.set_mode((1500, 780))
-    # screen.fill((100, 100, 100))
-    # screen.blit(background, (0, 0))
     font = pygame.font.Font(None, 25)
     instruction_text = 'press r to play again...'
     text_color = (255, 0, 0)
     instructions_image = font.render(instruction_text, True, text_color)
     hero = MikeDemonSlayer(screen, 20, 590)
-    # incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
-    # bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
-    # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_waves = 1
     throng = Horde(screen, num_waves)
-    # gargoyle = Fleet(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
     moloch = Necromancer(screen, 1000, hero.y)
-    # ronald = Skelle(screen, moloch.x, moloch.y)
-    nub = 0
     army = Tank_Group(screen, 5, num_waves)
     while True:
         clock.tick(60)
         screen.fill((0, 0, 0))
         hero.draw()
-        # ronald.draw()
-        # ronald.move()
-        # screen.blit(background, (0, 0))
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_ESCAPE]:
@@ -539,7 +507,6 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 hero.primary_fire()
-                # bonnibel.spitfire()
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_r]:
                 main()
         if is_game_over:
@@ -551,10 +518,7 @@ def main():
         for skeleton in moloch.flock:
             skeleton.draw()
             skeleton.move()
-        # for mob in gargoyle.fleet:
-        #     mob.spitfire()
 
-        # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
         moloch.wind_up()
         moloch.draw(hero.y)
@@ -566,26 +530,11 @@ def main():
         army.shooty()
 
         hero.draw()
-        # incanus.move()
-        # incanus.draw()
-        # bonnibel.move()
-        # bonnibel.draw()
-        # if bonnibel.count >= 0:
-        #     bonnibel.spitfire()
-        # for dink in bonnibel.incinerate:
-        #     dink.move()
-        #     dink.draw()
 
         throng.move()
         throng.draw()
 
-        # gargoyle.move()
-        # gargoyle.draw()
-        #
-        # if is_game_over:
-        #     screen.blit(game_over_image, (500, 226))
-        #     pygame.display.update()
-        #     continue
+
         for bullet in hero.bullets:
             bullet.move()
             bullet.draw()
@@ -597,17 +546,12 @@ def main():
         offal.draw()
         counter = 0
         for demon in throng.horde:
-            # if demon.x < hero.image.get_width():
-            #     is_game_over = True
             if demon.x < - hero.image.get_width():
-                demon.is_dead()
+                demon.is_dead = True
                 throng.clean_up_time()
             for bullet in hero.bullets:
                 if bullet.x >= screen.get_width():
                     bullet.has_boomed = True
-
-
-
 
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
@@ -621,10 +565,10 @@ def main():
                         offal.make_blood(demon.x, demon.y)
                     demon.is_dead = True
                     throng.clean_up_time()
-                    # del bullet
+
 
             counter = counter + 1
-            # del incanus
+
         nub = 0
         for skeleton in moloch.flock:
             skeleton.check_skin()
