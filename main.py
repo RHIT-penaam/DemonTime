@@ -453,12 +453,15 @@ class Tank:
 
 
 class Tank_Group:
-    def __init__(self, screen, quantity):
+    def __init__(self, screen, quantity, num_waves):
         self.group = []
         self.screen = screen
-        for g in range(int(quantity)):
-            jim = Tank(self.screen, (1400 + random.randrange(-200, 200)), (random.randrange(200, 600)))
-            self.group.append(jim)
+        self.num_waves = num_waves
+        for h in range(num_waves):
+            if h >= 1:
+                for g in range(int(quantity)):
+                    jim = Tank(self.screen, (1400 + random.randrange(-200, 200)), (random.randrange(200, 600)))
+                    self.group.append(jim)
     @property
     def is_defeated(self):
         return len(self.group) == 0
@@ -512,15 +515,15 @@ def main():
     # bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
     # throng = Horde(screen, num_enemies)
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
-    num_enemies = 1
-    throng = Horde(screen, num_enemies)
+    num_waves = 1
+    throng = Horde(screen, num_waves)
     # gargoyle = Fleet(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
     moloch = Necromancer(screen, 1000, hero.y)
     # ronald = Skelle(screen, moloch.x, moloch.y)
     nub = 0
-    army = Tank_Group(screen, 5)
+    army = Tank_Group(screen, 5, num_waves)
     while True:
         clock.tick(60)
         screen.fill((0, 0, 0))
@@ -598,9 +601,12 @@ def main():
             for bullet in hero.bullets:
                 if bullet.x >= screen.get_width():
                     bullet.has_boomed = True
+                if demon.x < -50:
+                    del throng.horde[counter]
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
                     scoreboard.score += 100
+
 
                     for k in range(6):
                         offal.make_gib(demon.x, demon.y)
@@ -661,8 +667,8 @@ def main():
 
 
         if throng.is_defeated:
-            num_enemies += 1
-            throng = Horde(screen, num_enemies)
+            num_waves += 1
+            throng = Horde(screen, num_waves)
 
         if pressed_keys[pygame.K_UP]:
             hero.move(-5)
