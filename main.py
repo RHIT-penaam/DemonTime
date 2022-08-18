@@ -209,26 +209,27 @@ class Scoreboard(object):
         self.screen.blit(score_image, (5, 5))
 
 
-class Demonwing:
-    def __init__(self, screen, x, y, max_health, speed):
-        self.screen = screen
-        self.max_health = max_health
-        self.speed = speed
-        self.x = x
-        self.y = y
-        self.incinerate = []
-        self.count = 0
-
-    def draw(self):
-        pygame.draw.rect(self.screen, pygame.Color('pink'), pygame.Rect(self.x, self.y, 10, 10))
-
-    def move(self):
-        self.x -= self.speed
-        self.count += 1
-
-    def spitfire(self):
-        flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
-        self.incinerate.append(flame)
+# class Demonwing:
+#     def __init__(self, screen, x, y, max_health, speed):
+#         self.screen = screen
+#         self.max_health = max_health
+#         self.speed = speed
+#         self.x = x
+#         self.y = y
+#         self.incinerate = []
+#         self.count = 0
+#
+#     def draw(self):
+#         pygame.draw.rect(self.screen, pygame.Color('pink'), pygame.Rect(self.x, self.y, 10, 10))
+#
+#     def move(self):
+#         self.x -= self.speed
+#         self.count += 1
+#
+#     def spitfire(self):
+#
+#         flame = Hellfire(self.screen, self.x, self.y, 5, 5, 2)
+#         self.incinerate.append(flame)
     # def hit_by(self):
         # hitbox = pygame.Rect(self.x, self.y, )
 
@@ -342,25 +343,25 @@ class Skelle:
         hitbox = pygame.Rect(self.x, self.y, self.normal_sprite.get_width(), self.normal_sprite.get_height())
         return hitbox.collidepoint(bullet.x, bullet.y)
 
-class Fleet:
-    def __init__(self, screen, num_enemies):
-        self.fleet = []
-        for h in range(num_enemies):
-            for k in range(5):
-                self.fleet.append(Demonwing(screen, 1100 + random.randint(100, 200), random.randrange(200, 800), 20, random.randrange(3, 4, 1)))
+# class Fleet:
+#     def __init__(self, screen, num_enemies):
+#         self.fleet = []
+#         for h in range(num_enemies):
+#             for k in range(5):
+#                 self.fleet.append(Demonwing(screen, 1100 + random.randint(100, 200), random.randrange(200, 800), 20, random.randrange(3, 4, 1)))
 
-    @property
-    def is_defeated(self):
-        return len(self.fleet) == 0
-
-    def move(self):
-        for demon in self.fleet:
-            demon.move()
-
-    def draw(self):
-        for demon in self.fleet:
-            demon.draw()
-
+    # @property
+    # def is_defeated(self):
+    #     return len(self.fleet) == 0
+    #
+    # def move(self):
+    #     for demon in self.fleet:
+    #         demon.move()
+    #
+    # def draw(self):
+    #     for demon in self.fleet:
+    #         demon.draw()
+    #
 
 class Tank:
     def __init__(self, screen, x, y):
@@ -488,7 +489,7 @@ def main():
     game_over_image = pygame.image.load('istockphoto-1193545103-612x612.jpg')
     num_enemies = 1
     throng = Horde(screen, num_enemies)
-    gargoyle = Fleet(screen, num_enemies)
+    # gargoyle = Fleet(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
     moloch = Necromancer(screen, 1000, hero.y)
@@ -521,8 +522,8 @@ def main():
         for skeleton in moloch.flock:
             skeleton.draw()
             skeleton.move()
-        for mob in gargoyle.fleet:
-            mob.spitfire()
+        # for mob in gargoyle.fleet:
+        #     mob.spitfire()
 
         # screen.blit(main_title, (500, 100)) put this in the main menu David
         pressed_keys = pygame.key.get_pressed()
@@ -549,8 +550,8 @@ def main():
         throng.move()
         throng.draw()
 
-        gargoyle.move()
-        gargoyle.draw()
+        # gargoyle.move()
+        # gargoyle.draw()
         #
         # if is_game_over:
         #     screen.blit(game_over_image, (500, 226))
@@ -652,24 +653,56 @@ def main_menu():
     screen = pygame.display.set_mode((1500, 780))
     pygame.display.set_caption("DEMON TIME")
     font = pygame.font.Font(None, 25)
-    instruction_text = 'click anywhere to start the slaughter...'
+    instruction_text = 'click here for instructions...'
     text_color = (255, 0, 0)
     instructions_image = font.render(instruction_text, True, text_color)
+    start_image = pygame.image.load('pixil-frame-0 (6).png')
     main_title = pygame.image.load('pixil-frame-0_5.png')
     sick_demon_skull = pygame.image.load('BIG_DEMON_TIME.png')
     sick_demon_skull.set_colorkey((255, 255, 255))
-    bertie = "the best dog ever"
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click_pos = event.pos
+                print(click_pos)
+                if 656 < event.pos[0] < 842 and 578 < event.pos[1] < 637:
+                    main()
+                if 670 < event.pos[1] < 685 and 640 < event.pos[0] < 875:
+                    instructions()
+        screen.fill(pygame.Color("Black"))
+        screen.blit(instructions_image, (640, 670))
+        screen.blit(start_image, (540, 450))
+        screen.blit(sick_demon_skull, (460, 125))
+        screen.blit(main_title, (500, -50))
+        pygame.display.update()
+
+def instructions():
+    pygame.init()
+    screen = pygame.display.set_mode((1500, 780))
+    pygame.display.set_caption("DEMON TIME")
+    font = pygame.font.Font(None, 50)
+    font2 = pygame.font.Font(None, 25)
+    instruction_line_1 = 'Take the fight to hell! '
+    instruction_line_2 = 'Press space to shoot and the up and down arrow keys to move!'
+    instruction_done = 'click anywhere to continue...'
+    text_color = (255, 0, 0)
+    line1 = font.render(instruction_line_1, True, text_color)
+    line2 = font.render(instruction_line_2, True, text_color)
+    go_to_game = font2.render(instruction_done, True, text_color)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 main()
-        screen.fill(pygame.Color("Black"))
-        screen.blit(instructions_image, (590, 670))
-        screen.blit(sick_demon_skull, (460, 200))
-        screen.blit(main_title, (500, 10))
+        screen.fill(pygame.Color("black"))
+        screen.blit(line1, (590, 100))
+        screen.blit(line2, (250, 150))
+        screen.blit(go_to_game, (600, 500))
         pygame.display.update()
+
 
 
 main_menu()
