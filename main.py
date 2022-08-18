@@ -380,8 +380,8 @@ def main():
         # incanus.draw()
         bonnibel.move()
         bonnibel.draw()
-        # if bonnibel.count >= 0:
-        #     bonnibel.spitfire()
+        if bonnibel.count >= 0:
+            bonnibel.spitfire()
         for dink in bonnibel.incinerate:
             dink.move()
             dink.draw()
