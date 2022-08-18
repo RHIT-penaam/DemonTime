@@ -599,9 +599,15 @@ def main():
         for demon in throng.horde:
             # if demon.x < hero.image.get_width():
             #     is_game_over = True
+            if demon.x < - hero.image.get_width():
+                demon.is_dead()
+                throng.clean_up_time()
             for bullet in hero.bullets:
                 if bullet.x >= screen.get_width():
                     bullet.has_boomed = True
+
+
+
 
                 if demon.hit_by(bullet):
                     bullet.has_boomed = True
