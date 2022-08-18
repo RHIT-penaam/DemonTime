@@ -275,9 +275,12 @@ class Necromancer:
         elif self.state == 1:
             self.current_skin = self.raised_skin
         elif self.state == 3:
+            ayn = random.randrange(0, 6)
             self.current_skin = self.power_skin
             wallace = Skelle(self.screen, self.x + random.randrange(-30, 30), self.y + random.randrange(-70, 80))
-            self.flock.append(wallace)
+            if ayn == 5:
+                # self.flock.append(wallace)
+                bears = "bears"
             wait += 1
             if wait > 2:
                 self.state = 0
@@ -287,8 +290,6 @@ class Necromancer:
     def draw(self, y):
         self.y = y
         self.screen.blit(self.current_skin, (self.x, self.y))
-
-
 class Skelle:
     def __init__(self, screen, x, y):
         self.x = x
@@ -318,6 +319,80 @@ class Skelle:
             return False
 
 
+class Tank:
+    def __init__(self, screen, x, y):
+        self.screen = screen
+        self.speed = 1
+        self.x = x
+        self.y = y
+        self.wiggle = 0
+        self.health = 40
+        self.max_health = self.health
+        self.firing = False
+        self.can_fire = True
+        self.is_dead = False
+        self.image_normal = pygame.image.load("Shotgun_tank.png")
+        self.image_damaged = pygame.image.load("Damage_Sprite_Tank.png")
+        self.image_blood_neutral = pygame.image.load("Normal_blood_tank.png")
+        self.image_blood_charge = pygame.image.load("Charge_blood_tank.png")
+        self.current_skin = self.image_normal
+
+    def check_skin(self):
+        if self.health > 25:
+            self.current_skin = self.image_normal
+        elif self.health > 20:
+            self.current_skin = self.image_damaged
+            self.can_fire = False
+
+        elif self.health > 15:
+            bees = random.randrange(0, 10)
+            birds = random.randrange(0, 3)
+            if bees == 9:
+                if birds == 1:
+                    self.speed = 2
+                    self.wiggle = 2
+                    self.current_skin = self.image_blood_neutral
+                else:
+                    self.speed = 4
+                    self.wiggle = 3
+                    self.current_skin = self.image_blood_charge
+
+    def draw(self):
+        self.screen.blit(self.current_skin, (self.x, self.y))
+
+    def move(self):
+        self.x -= self.speed
+        if self.wiggle > 0:
+            self.y += random.randrange(0, self.wiggle)
+
+    def hit_by(self, bullet):
+        hitbox = pygame.Rect(self.x, self.y, self.image_normal.get_width(), self.image_normal.get_height())
+        return hitbox.collidepoint(bullet.x, bullet.y)
+
+
+class Tank_Group:
+    def __init__(self, screen, quantity):
+        self.group = []
+        self.screen = screen
+        for g in range(int(quantity)):
+            jim = Tank(self.screen, (1400 + random.randrange(-200, 200)), (random.randrange(200, 600)))
+            self.group.append(jim)
+    @property
+    def is_defeated(self):
+        return len(self.group) == 0
+
+    def move(self):
+        for tank in self.group:
+            tank.move()
+
+    def draw(self):
+        for tank in self.group:
+            tank.draw()
+
+    def check_skin(self):
+        for tank in self.group:
+            tank.check_skin()
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -343,6 +418,7 @@ def main():
     moloch = Necromancer(screen, 1000, hero.y)
     # ronald = Skelle(screen, moloch.x, moloch.y)
     nub = 0
+    army = Tank_Group(screen, 5)
     while True:
         clock.tick(60)
         screen.fill((0, 0, 0))
@@ -374,6 +450,9 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         moloch.wind_up()
         moloch.draw(hero.y)
+        army.draw()
+        # army.check_skin()
+        army.move()
 
         hero.draw()
         # incanus.move()
@@ -429,6 +508,34 @@ def main():
                     del bullet
                     del moloch.flock[nub]
             nub = nub + 1
+            bub = 0
+            for tank_demon in army.group:
+                for bullet in hero.bullets:
+                    if army.group[bub].hit_by(bullet):
+                        bullet.has_boomed = True
+                        scoreboard.score += 30
+                        del bullet
+                        if army.group[bub].health >= 30:
+                            army.group[bub].health -= 1
+                            offal.make_blood(tank_demon.x, tank_demon.y)
+                            army.group[bub].check_skin()
+                        elif army.group[bub].health >= 25:
+                            for k in range(5):
+                                offal.make_gib(tank_demon.x, tank_demon.y)
+                                offal.make_blood(tank_demon.x, tank_demon.y)
+                                offal.make_blood(tank_demon.x, tank_demon.y)
+                                offal.make_blood(tank_demon.x, tank_demon.y)
+                            army.group[bub].health -= 1
+                            army.group[bub].check_skin()
+                        elif army.group[bub].health >= 15:
+                            army.group[bub].check_skin()
+                            army.group[bub].health -= 1
+                        else:
+                            del army.group[bub]
+                bub = bub + 1
+
+
+
         if throng.is_defeated:
             num_enemies += 1
             throng = Horde(screen, num_enemies)
