@@ -19,6 +19,7 @@ class MikeDemonSlayer:
     def primary_fire(self):
         new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 5, 4, 4)
         self.bullets.append(new_bullet)
+
         # add sound?
 
     def move(self, disp):
@@ -277,7 +278,7 @@ class Necromancer:
             wallace = Skelle(self.screen, self.x + random.randrange(-30, 30), self.y + random.randrange(-70, 80))
             self.flock.append(wallace)
             wait += 1
-            if wait > 4:
+            if wait > 2:
                 self.state = 0
         elif self.state > 3:
             self.state = 0
@@ -339,14 +340,14 @@ def main():
     main_title = pygame.image.load('pixil-frame-0 (1).png')
     screen.blit(main_title, (500,100))
     moloch = Necromancer(screen, 1000, hero.y)
-    ronald = Skelle(screen, moloch.x, moloch.y)
+    # ronald = Skelle(screen, moloch.x, moloch.y)
     nub = 0
     while True:
         clock.tick(60)
         screen.fill((0, 0, 0))
         hero.draw()
-        ronald.draw()
-        ronald.move()
+        # ronald.draw()
+        # ronald.move()
         # screen.blit(background, (0, 0))
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
@@ -396,9 +397,10 @@ def main():
             bullet.move()
             bullet.draw()
             hero.remove_dead_bullets()
-        counter = 0
+
         offal.move()
         offal.draw()
+        counter = 0
         for demon in throng.horde:
             if demon.x < hero.image.get_width():
                 is_game_over = True
@@ -415,8 +417,6 @@ def main():
                         offal.make_blood(demon.x, demon.y)
                         offal.make_blood(demon.x, demon.y)
                     del throng.horde[counter]
-
-                if bullet.has_boomed == True:
                     del bullet
             counter = counter + 1
             # del incanus
