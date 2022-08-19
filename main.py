@@ -5,11 +5,12 @@ import random
 
 
 class MikeDemonSlayer:
-    def __init__(self, screen, x, y):
+    def __init__(self, screen, x, y, gun_sound):
         self.screen = screen
         self.x = x
         self.y = y
         self.bullets = []
+        self.gun_sound = gun_sound
         self.image = pygame.image.load('nipple_boy_transparent')
         # self.image.set_colorkey((255, 255, 255)) 'has no effect'
 
@@ -19,6 +20,7 @@ class MikeDemonSlayer:
     def primary_fire(self):
         new_bullet = bullet_neutral(self, self.screen, 41, self.y + self.image.get_height() / 2, 5, 4, 4)
         self.bullets.append(new_bullet)
+        self.gun_sound.play()
 
         # add sound?
 
@@ -522,7 +524,8 @@ def main():
     instruction_text = 'press r to play again...'
     text_color = (255, 0, 0)
     instructions_image = font.render(instruction_text, True, text_color)
-    hero = MikeDemonSlayer(screen, 20, 590)
+    pew_1 = pygame.mixer.Sound("pew.wav")
+    hero = MikeDemonSlayer(screen, 20, 590, pew_1)
     # incanus = Demon(screen, 1000, 200, 30, "teeth", random.randrange(1, 3, 1))
     # bonnibel = Demonwing(screen, 1100, 200, 20, 'fury', 3)
     # throng = Horde(screen, num_enemies)
@@ -537,6 +540,7 @@ def main():
     nub = 0
     army = Tank_Group(screen, 2, 1)
     num_waves_tank = 3
+
     while True:
         clock.tick(60)
         screen.fill((0, 0, 0))
