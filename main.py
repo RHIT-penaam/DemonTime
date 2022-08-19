@@ -276,6 +276,8 @@ class Necromancer:
         self.y = y
         self.flock = []
         self.ned = 1
+        self.health = 200
+        self.is_dead = False
 
     def toll_up_the_dead(self):
         for k in range(len(self.flock) - 1, - 1, - 1):
@@ -285,14 +287,18 @@ class Necromancer:
     def wind_up(self):
         wait = 0
         self.ned = random.randrange(1, 50)
-        if self.ned == 3:
+        if self.is_dead == True:
+            oh_no = "mario"
+        elif self.ned == 3:
             self.state += 1
-        if self.state == 0:
+        if self.is_dead == True:
+            oh_no = "mario"
+        elif self.state == 0:
             self.current_skin = self.neutral_skin
         elif self.state == 1:
             self.current_skin = self.raised_skin
         elif self.state == 3:
-            ayn = random.randrange(0, 6)
+            ayn = random.randrange(0, 8)
             self.current_skin = self.power_skin
             wallace = Skelle(self.screen, self.x + random.randrange(-30, 30), self.y + random.randrange(-70, 80))
             if ayn == 5:
@@ -305,13 +311,18 @@ class Necromancer:
             self.state = 0
 
     def draw(self, y):
-        if y > self.y:
+        if self.is_dead == True:
+            oh_no = "mario"
+        elif y > self.y:
             self.y += 2
         elif y < self.y:
             self.y -= 2
         else:
             self.y += random.randrange(-1, 1)
         self.screen.blit(self.current_skin, (self.x, self.y))
+    def hit_by_generic(self, bullet):
+        hitbox = pygame.Rect(self.x, self.y, self.current_skin.get_width(), self.current_skin.get_height())
+        return hitbox.collidepoint(bullet.x, bullet.y)
 
 class Skelle:
     def __init__(self, screen, x, y):
@@ -521,7 +532,7 @@ def main():
     # gargoyle = Fleet(screen, num_enemies)
     offal = gibs(screen)
     scoreboard = Scoreboard(screen)
-    moloch = Necromancer(screen, 1000, hero.y)
+    moloch = Necromancer(screen, 1300, hero.y)
     # ronald = Skelle(screen, moloch.x, moloch.y)
     nub = 0
     army = Tank_Group(screen, 2, 1)
@@ -641,6 +652,14 @@ def main():
                     elif skeleton.is_cracked:
                         skeleton.is_dead = True
             nub = nub + 1
+        for bullet in hero.bullets:
+            if moloch.hit_by_generic(bullet):
+                moloch.health -= 5
+                scoreboard.score += 100
+            if moloch.health <= 0:
+                scoreboard.score += 10000
+                moloch.is_dead = True
+                moloch.current_skin = pygame.image.load("bone_gib.png")
         for skeleton in moloch.flock:
             if skeleton.hit_by(hero):
                 is_game_over = True
